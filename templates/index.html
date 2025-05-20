@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <title>Dozer's Live Storm Chasing Team</title>
     <style>
-        body {
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
             font-family: Arial;
             background: url("{{ url_for('static', filename='083f71dc-03e0-4d24-b241-2afbe55c8de3.png') }}") no-repeat center center fixed;
             background-size: cover;
@@ -17,19 +21,35 @@
             height: auto;
         }
 
+        .main-content {
+            flex: 1;
+        }
+
         .message-board {
             max-width: 600px;
-            margin: auto;
+            margin: 20px auto;
             padding: 1em;
             background: #222;
             border-radius: 8px;
         }
+		
+		.message-board ul {
+			list-style: none;
+			padding: 0;
+			text-align: left;
+		}
+
+		.message-board li {
+			padding: 5px 10px;
+			border-bottom: 1px solid #444;
+		}
 
         input, textarea {
             width: 90%;
             padding: 0.5em;
             margin: 0.5em 0;
             border-radius: 4px;
+            border: none;
         }
 
         .discord-button {
@@ -51,14 +71,15 @@
     </style>
 </head>
 <body>
-    <h1>🌪️ Dozer's Live Storm Chasing Team 🌪️</h1>
-    <img src="{{ url_for('static', filename='dozers.png') }}" alt="Dozer's Logo" style="width: 300px; height: auto;">
-
-    <p>
-        <a href="https://discord.gg/dozerslivestormchasing" class="discord-button" target="_blank">
-            🌩️ Join our Discord
-        </a>
-    </p>
+    <div class="main-content">
+        <h1>🌪️ Dozer's Live Storm Chasing Team 🌪️</h1>
+        <img src="{{ url_for('static', filename='dozers.png') }}" alt="Dozer's Logo" style="width: 300px; height: auto;">
+        <p>
+            <a href="https://discord.gg/dozerslivestormchasing" class="discord-button" target="_blank">
+                🌩️ Join our Discord
+            </a>
+        </p>
+    </div>
 
     <div class="message-board">
         <h2>Message Board</h2>
@@ -72,6 +93,9 @@
                 <li><strong>{{ msg.username }}:</strong> {{ msg.message }}</li>
             {% endfor %}
         </ul>
+    </div>
+</body>
+</html>
     </div>
 </body>
 </html>
