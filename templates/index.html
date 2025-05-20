@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dozer's Live Storm Chasing Team</title>
+    <style>
+        body { font-family: Arial; background: #111; color: #eee; text-align: center; }
+        img { max-width: 100%; height: auto; }
+        .message-board { max-width: 600px; margin: auto; padding: 1em; background: #222; border-radius: 8px; }
+        input, textarea { width: 90%; padding: 0.5em; margin: 0.5em 0; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>🌪️ Dozer's Live Storm Chasing Team 🌪️</h1>
+    <img src="{{ url_for('static', filename='dozers.png') }}" alt="Dozer's Logo" style="width: 300px; height: auto;">
+
+    <p><a href="https://discord.gg/dozerslivestormchasing" target="_blank">Join our Discord 🌩️</a></p>
+
+    <div class="message-board">
+        <h2>Message Board</h2>
+        <form method="POST">
+            <input name="username" placeholder="Your name" required><br>
+            <textarea name="message" placeholder="Your message" required></textarea><br>
+            <button type="submit">Post</button>
+        </form>
+        <ul>
+            {% for msg in messages %}
+                <li><strong>{{ msg.username }}:</strong> {{ msg.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
