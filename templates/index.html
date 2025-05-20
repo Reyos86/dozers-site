@@ -4,25 +4,50 @@
     <meta charset="UTF-8">
     <title>Dozer's Live Storm Chasing Team</title>
     <style>
-        body { font-family: Arial; background: #111; color: #eee; text-align: center; }
-        img { max-width: 100%; height: auto; }
-        .message-board { max-width: 600px; margin: auto; padding: 1em; background: #222; border-radius: 8px; }
-        input, textarea { width: 90%; padding: 0.5em; margin: 0.5em 0; border-radius: 4px; }
+        body {
+            font-family: Arial;
+            background: url("{{ url_for('static', filename='083f71dc-03e0-4d24-b241-2afbe55c8de3.png') }}") no-repeat center center fixed;
+            background-size: cover;
+            color: #eee;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .message-board {
+            max-width: 600px;
+            margin: auto;
+            padding: 1em;
+            background: #222;
+            border-radius: 8px;
+        }
+
+        input, textarea {
+            width: 90%;
+            padding: 0.5em;
+            margin: 0.5em 0;
+            border-radius: 4px;
+        }
+
         .discord-button {
-    background-color: #5865F2; /* Discord blurple */
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    font-family: sans-serif;
-    display: inline-block;
-    transition: background-color 0.2s ease;
-}
-.discord-button:hover {
-    background-color: #4752C4;
-}
+            background-color: #5865F2; /* Discord blurple */
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: sans-serif;
+            display: inline-block;
+            transition: background-color 0.2s ease;
+        }
+
+        .discord-button:hover {
+            background-color: #4752C4;
+        }
     </style>
 </head>
 <body>
@@ -30,9 +55,9 @@
     <img src="{{ url_for('static', filename='dozers.png') }}" alt="Dozer's Logo" style="width: 300px; height: auto;">
 
     <p>
-    <a href="https://discord.gg/dozerslivestormchasing" class="discord-button" target="_blank">
-    🌩️ Join our Discord
-    </a>
+        <a href="https://discord.gg/dozerslivestormchasing" class="discord-button" target="_blank">
+            🌩️ Join our Discord
+        </a>
     </p>
 
     <div class="message-board">
