@@ -13,7 +13,7 @@ founders = [
         "nickname": "The Jeep-Flipping Mod Extraordinaire",
         "bio": "Hey, I’m DarkShockGamer. I help keep things running smoothly as a moderator on our Discord server. Whether it's navigating wild in-game moments (yes, even the occasional jeep flip) or helping the community stay connected and respectful, I’m always here to keep the wheels turning.",
         "youtube": "https://www.youtube.com/@DarkShockGamer1",
-      #  "twitch": "https://twitch.tv/stormrider"
+        "twitch": "https://www.twitch.tv/blackshockgamer"
     },
     {
         "name": "BullDozerBates",
