@@ -68,6 +68,94 @@
         .discord-button:hover {
             background-color: #4752C4;
         }
+		.about-section {
+			max-width: 800px;
+			margin: 30px auto;
+			padding: 20px 30px;
+			background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,25,50,0.6));
+			border-radius: 16px;
+			box-shadow: 0 0 20px rgba(0,0,0,0.4);
+			color: #f0f0f0;
+			font-family: Arial, sans-serif;
+			text-align: left;
+			backdrop-filter: blur(6px);
+		}
+
+		.about-section h2 {
+			font-size: 2em;
+			margin-bottom: 15px;
+			color: #ffffff;
+			letter-spacing: 1px;
+		}
+
+		.about-section p {
+			font-size: 1.1em;
+			line-height: 1.6;
+			color: #dddddd;
+			margin: 10px 0;
+		}
+		.founders-section {
+			max-width: 1200px;
+			margin: 40px auto;
+			padding: 1em;
+			background: rgba(0, 0, 0, 0.6);
+			border-radius: 12px;
+		}
+
+		.founders-section h2 {
+			margin-bottom: 20px;
+			color: #fff;
+			text-align: center;
+		}
+
+		.founders-grid {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 20px;
+		}
+
+		.founder-card {
+			background: #1a1a1a;
+			border-radius: 8px;
+			padding: 1em;
+			width: 260px;
+			color: #eee;
+			text-align: center;
+			box-shadow: 0 0 10px rgba(0,0,0,0.4);
+		}
+
+		.founder-card img {
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+			object-fit: cover;
+			margin-bottom: 10px;
+		}
+
+		.founder-card h3 {
+			margin: 10px 0 5px;
+			font-size: 1.2em;
+		}
+
+		.founder-card p {
+			font-size: 0.9em;
+			line-height: 1.4;
+			margin-bottom: 10px;
+		}
+
+		.social-links a {
+			font-size: 1.5em;
+			margin: 0 6px;
+			color: #eee;
+			text-decoration: none;
+			transition: color 0.2s ease;
+		}
+
+		.social-links a:hover {
+			color: #00aaff;
+		}
+		
     </style>
 </head>
 <body>
@@ -76,10 +164,42 @@
         <img src="{{ url_for('static', filename='dozers.png') }}" alt="Dozer's Logo" style="width: 300px; height: auto;">
         <p>
             <a href="https://discord.gg/dozerslivestormchasing" class="discord-button" target="_blank">
-                🌩️ Join our Discord
+                Join our Discord
             </a>
         </p>
     </div>
+
+	<div class="about-section">
+		<h2>About Us</h2>
+		<p>
+			We met while chasing tornadoes in the game Outbrk, and it didn’t take long for the chaos to turn into camaraderie. Our chill-but-outgoing personalities just clicked, and before we knew it, we had a convoy — or at least a van full of Jeffs — barreling toward the next storm. We’re here to have a good time, throw down some probes, and maybe yell over each other on comms when that radar hook tightens up.
+		</p>
+		<p>
+			At the core, Dozer’s Live Storm Chasing Team is about community. We love bringing new players into the chase, helping them learn the ropes, and keeping our viewers part of the action during every stream. Whether you’re riding along for laughs, learning to intercept, or just vibing in chat — welcome to the team!
+		</p>
+	</div>
+
+	<div class="founders-section">
+		<h2>Meet the Founders</h2>
+		<div class="founders-grid">
+			{% for founder in founders %}
+			<div class="founder-card">
+				<img src="{{ url_for('static', filename=founder.image) }}" alt="{{ founder.name }}">
+				<h3>{{ founder.name }}</h3>
+				<p>{{ founder.nickname }}</p>
+				<p>{{ founder.bio }}</p>
+				<div class="social-links">
+					{% if founder.youtube %}
+					<a href="{{ founder.youtube }}" target="_blank">📺</a>
+					{% endif %}
+					{% if founder.twitch %}
+					<a href="{{ founder.twitch }}" target="_blank">🎮</a>
+					{% endif %}
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
 
     <div class="message-board">
         <h2>Message Board</h2>
@@ -93,9 +213,6 @@
                 <li><strong>{{ msg.username }}:</strong> {{ msg.message }}</li>
             {% endfor %}
         </ul>
-    </div>
-</body>
-</html>
     </div>
 </body>
 </html>
