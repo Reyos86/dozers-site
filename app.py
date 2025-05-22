@@ -48,13 +48,36 @@ founders = [
         "twitch": "https://www.twitch.tv/reyos86"
     },
         {
-        "name": "Joe Garodah",
+        "name": "Joe \"Garodah\"",
         "image": "founders/joe.png",
         "nickname": "The Weatherman",
         "bio": "Joe didn’t just study weather — he probably majored in “knowing where the storm is before the radar does.” While the rest of us are yelling “WHERE’S IT GOING?”, Joe’s already halfway there, sipping coffee and marking the probe spot with GPS-level precision.",
         "youtube": "https://youtube.com/@garodah?si=qc9CkDalQ-t9TszC",
       #  "twitch": "https://twitch.tv/skysniper"
     },
+        {
+        "name": "Dre \"BeardedSerb\"",
+        "image": "founders/bearded.png",
+        "nickname": "CodeChaser",
+        "bio": "tech-savvy wizard behind our Discord and a seasoned gamer with stories for days. When he’s not wrangling IT by day, you’ll catch him streaming GTA RP on ONX or tearing up the track in iRacing with his squad, The Wrong Stuff — all without a schedule, just good vibes.",
+        "youtube": "https://www.youtube.com/channel/UCHb0kIy3Sa5Qbl5hxAfn8ew",
+      #  "twitch": "https://twitch.tv/skysniper"
+    },        
+    {
+        "name": "Warren Modding",
+        "image": "founders/warren.png",
+        "nickname": "The Stormsmith",
+        "bio": "Builds mods by night and chases twisters by instinct. Whether he’s coding new gear for the crew or floorboarding it toward a rotating supercell, Warren’s the kind of guy who can deploy a probe and patch a config file in the same breath.",
+      #  "youtube": "https://youtube.com/@garodah?si=qc9CkDalQ-t9TszC",
+      #  "twitch": "https://www.twitch.tv/bearded_serb/about"
+    },        {
+        "name": "Ayeejax",
+        "image": "founders/aj.png",
+        "nickname": "Radar Renegade",
+        "bio": "AJ doesn’t check the radar — the radar checks with AJ. Known for casually flirting with EF3s and turning missed intercepts into highlight reels, Ayeejax lives by one motto: if there’s a storm worth chasing, he’s already down the road yelling “SEND IT!” over comms.",
+        "youtube": "https://www.youtube.com/channel/UCISTQmtiSMZuzJNX_YYJ-0A",
+    #    "twitch": "https://www.twitch.tv/applejacks1980"
+    },    
 ]
 
 @app.route('/', methods=['GET', 'POST'])
