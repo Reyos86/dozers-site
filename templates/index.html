@@ -155,10 +155,43 @@
 		.social-links a:hover {
 			color: #00aaff;
 		}
+
+		.navbar {
+		  display: flex;
+		  justify-content: center;
+		  gap: 40px;
+		  padding: 15px 0;
+		  background: rgba(0, 0, 0, 0.7);
+		  position: fixed;
+		  width: 100%;
+		  top: 0;
+		  z-index: 999;
+		  backdrop-filter: blur(6px);
+		}
 		
+		.navbar a {
+		  color: #eee;
+		  text-decoration: none;
+		  font-weight: bold;
+		  font-size: 1rem;
+		  transition: color 0.2s ease;
+		}
+		
+		.navbar a:hover {
+		  color: #00aaff;
+		}
+	    
     </style>
 </head>
 <body>
+
+	<div class="navbar">
+	  <a href="/media">Media</a>
+	  <a href="https://trello.com/b/oXuJZS7p/dozers-team" target="_blank">Trello</a>
+	  <a href="#message-board">Message Board</a>
+	  <a href="https://www.wunderground.com/" target="_blank">Live Weather</a>
+	</div>
+		
     <div class="main-content">
         <h1>🌪️ Dozer's Live Storm Chasing Team 🌪️</h1>
         <img src="{{ url_for('static', filename='dozers.png') }}" alt="Dozer's Logo" style="width: 300px; height: auto;">
