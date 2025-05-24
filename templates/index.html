@@ -197,12 +197,12 @@
 		.featured-video h2 {
 		  font-size: 2em;
 		  margin-bottom: 20px;
-		  color: #00aaff;
+		  color: #f0f0f0;
 		}
 		
 		.video-wrapper {
 		  position: relative;
-		  padding-bottom: 56.25%;
+		  padding-bottom: 56.25%; /* 16:9 aspect ratio */
 		  height: 0;
 		  overflow: hidden;
 		  border-radius: 12px;
@@ -218,6 +218,7 @@
 		  border: none;
 		  border-radius: 12px;
 		}
+
 	    
     </style>
 </head>
@@ -255,17 +256,16 @@
 	<div class="featured-video">
 	  <h2>🎬 Featured Video</h2>
 	  <div class="video-wrapper">
-	     <iframe 
-	      src="https://www.youtube.com/watch?v=0B9r6stI7cI" 
-	      title="MASS Casualty Event!" 
-	      frameborder="0" 
-	      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+	    <iframe 
+	      src="https://www.youtube.com/embed/0B9r6stI7cI?si=MdE6sZd8uOk62zuQ" 
+	      title="YouTube video player" 
+	      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+	      referrerpolicy="strict-origin-when-cross-origin" 
 	      allowfullscreen>
 	    </iframe>
 	  </div>
 	</div>
 
-	
 	<div class="founders-section">
 		<h2>Meet the Founders</h2>
 		<div class="founders-grid">
