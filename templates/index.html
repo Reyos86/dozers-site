@@ -182,6 +182,42 @@
 		.navbar a:hover {
 		  color: #00aaff;
 		}
+
+	    .featured-video {
+		  max-width: 800px;
+		  margin: 40px auto;
+		  padding: 20px 30px;
+		  background: rgba(0, 0, 0, 0.6);
+		  border-radius: 16px;
+		  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+		  backdrop-filter: blur(6px);
+		  text-align: center;
+		}
+		
+		.featured-video h2 {
+		  font-size: 2em;
+		  margin-bottom: 20px;
+		  color: #00aaff;
+		}
+		
+		.video-wrapper {
+		  position: relative;
+		  padding-bottom: 56.25%;
+		  height: 0;
+		  overflow: hidden;
+		  border-radius: 12px;
+		  box-shadow: 0 0 12px rgba(0,0,0,0.5);
+		}
+		
+		.video-wrapper iframe {
+		  position: absolute;
+		  top: 0;
+		  left: 0;
+		  width: 100%;
+		  height: 100%;
+		  border: none;
+		  border-radius: 12px;
+		}
 	    
     </style>
 </head>
@@ -216,6 +252,20 @@
 		</p>
 	</div>
 
+	<div class="featured-video">
+	  <h2>🎬 Featured Video</h2>
+	  <div class="video-wrapper">
+	     <iframe 
+	      src="https://www.youtube.com/watch?v=0B9r6stI7cI" 
+	      title="MASS Casualty Event!" 
+	      frameborder="0" 
+	      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+	      allowfullscreen>
+	    </iframe>
+	  </div>
+	</div>
+
+	
 	<div class="founders-section">
 		<h2>Meet the Founders</h2>
 		<div class="founders-grid">
