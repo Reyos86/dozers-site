@@ -94,13 +94,13 @@ def get_weather():
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
 
         # Step 2: Attempt geolocation
-        geo_res = requests.get(f"https://ipapi.co/{client_ip}/json/")
+        geo_res = requests.get(f"https://ipinfo.io/{client_ip}/json")
         geo_data = geo_res.json()
-
         print("Geo data:", geo_data)
         
-        lat = geo_data.get("latitude")
-        lon = geo_data.get("longitude")
+        loc = geo_data.get("loc", "37.0855,-94.5134").split(',')
+        lat = loc[0]
+        lon = loc[1]
         city = geo_data.get("city", "Joplin")
         region = geo_data.get("region", "MO")
 
