@@ -103,20 +103,20 @@ def get_weather():
 
         # Step 2: Fetch weather and alerts from OpenWeatherMap One Call API
         api_key = "35b5f6e19f2be4347afe5d6076b4d008"
-        weather_url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
+        weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
         response = requests.get(weather_url)
         data = response.json()
 
         # Step 3: Handle weather data and optional alerts
-        alert = None
-        if "alerts" in data and data["alerts"]:
-            alert_data = data["alerts"][0]
-            alert = {
-                "event": alert_data.get("event"),
-                "description": alert_data.get("description"),
-                "sender": alert_data.get("sender_name"),
-                "tags": alert_data.get("tags", [])
-            }
+#        alert = None
+ #       if "alerts" in data and data["alerts"]:
+ #           alert_data = data["alerts"][0]
+  #          alert = {
+   #             "event": alert_data.get("event"),
+    #            "description": alert_data.get("description"),
+     #           "sender": alert_data.get("sender_name"),
+      #          "tags": alert_data.get("tags", [])
+       #     }
 
         return jsonify({
             "location": {
@@ -125,7 +125,7 @@ def get_weather():
             },
             "temperature": data["current"]["temp"],
             "narrative": data["current"]["weather"][0]["description"].title(),
-            "alert": alert
+            "alert": None
         })
 
     except Exception as e:
