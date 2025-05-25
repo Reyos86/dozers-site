@@ -80,6 +80,10 @@ founders = [
     },    
 ]
 
+@app.route('/media')
+def media():
+    return render_template('media.html')
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
