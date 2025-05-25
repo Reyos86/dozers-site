@@ -384,7 +384,7 @@
 	      `${data.location.city}, ${data.location.region}`;
 	
 	    document.getElementById("weatherInfo").textContent =
-	      `${data.temperature}°F — ${data.narrative}`;
+	      `${Math.round(data.temperature)}°F — ${data.narrative}`;
 	
 	    if (data.alert) {
 	    const alert = data.alert;
