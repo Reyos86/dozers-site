@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import json
 import os
+import requests
 
 app = Flask(__name__)
 
@@ -83,6 +84,32 @@ founders = [
 @app.route('/media')
 def media():
     return render_template('media.html')
+
+@app.route('/weather')
+def get_weather():
+    # Static for Joplin, MO
+    lat = 37.0855
+    lon = -94.5134
+    api_key = "497e85fd58f14e39be85fd58f1ee3956"
+
+    try:
+        weather_url = f"https://api.weather.com/v3/wx/conditions/current?geocode={lat},{lon}&format=json&units=e&language=en-US&apiKey={api_key}"
+        alerts_url = f"https://api.weather.com/v3/wx/alerts/headlines?geocode={lat},{lon}&format=json&language=en-US&apiKey={api_key}"
+
+        weather_data = requests.get(weather_url).json()
+        alerts_data = requests.get(alerts_url).json()
+
+        return jsonify({
+            "location": {
+                "city": "Joplin",
+                "region": "MO"
+            },
+            "temperature": weather_data.get("temperature"),
+            "narrative": weather_data.get("narrative"),
+            "alert": alerts_data.get("alerts", [{}])[0] if alerts_data.get("alerts") else None
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
