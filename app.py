@@ -127,10 +127,12 @@ def get_weather():
             alert_data = weather_data["alerts"][0]
             alert = {
                 "event": alert_data.get("event", "Weather Alert"),
-                "description": alert_data.get("description", ""),
-                "sender": alert_data.get("sender_name", "")
+                "description": alert_data.get("description", "No details provided."),
+                "sender": alert_data.get("sender_name", "Unknown Sender"),
+                "start": alert_data.get("start"),
+                "end": alert_data.get("end")
             }
-
+        
         return jsonify({
             "location": {"city": city, "region": region},
             "temperature": temperature,
