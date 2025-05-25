@@ -279,7 +279,7 @@
 	      if (data.error) throw new Error(data.error);
 	
 	      document.getElementById("weatherLocation").textContent = `${data.location.city}, ${data.location.region}`;
-	      document.getElementById("weatherInfo").textContent = `${data.temperature}°F — ${data.narrative}`;
+	      document.getElementById("weatherInfo").textContent = `${Math.round(data.temperature)}°F — ${data.narrative}`;
 	
 	      // Show alert if available
 	      if (data.alert) {
