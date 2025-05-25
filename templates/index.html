@@ -387,11 +387,9 @@
 	      `${data.temperature}°F — ${data.narrative}`;
 	
 	    if (data.alert) {
-	      const alert = data.alert;
-	      console.log("Alert data:", alert);  // 🔍 Log just the alert
-	
-	      document.getElementById("weatherAlert").innerHTML =
-		`🚨 <strong>${alert.event}</strong><br>${alert.description}<br><em>${alert.sender}</em>`
+	    const alert = data.alert;
+            document.getElementById("weatherAlert").innerHTML =
+	      `🚨 <strong>${alert.event}</strong><br><em>${alert.sender}</em>`;
 	    } else {
 	      document.getElementById("weatherAlert").innerHTML = "";
 	    }
