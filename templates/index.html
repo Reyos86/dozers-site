@@ -282,20 +282,22 @@
 	      document.getElementById("weatherInfo").textContent = `${data.temperature}°F — ${data.narrative}`;
 	
 	      if (data.alert) {
-	        const alert = data.alert;
-	        const alertHTML = `🚨 <strong>${alert.event}</strong><br>${alert.description}`;
-	        document.getElementById("weatherAlert").innerHTML = alertHTML;
+	        document.getElementById("weatherAlert").innerHTML = `
+	          🚨 <strong>${data.alert.event}</strong><br>
+	          ${data.alert.description}
+	        `;
 	      } else {
 	        document.getElementById("weatherAlert").innerHTML = "";
 	      }
 	    } catch (error) {
-	      console.error(error);
+	      console.error("JS error:", error);
 	      document.getElementById("weatherLocation").textContent = "Unable to load weather data.";
 	    }
 	  }
 	
 	  window.onload = fetchWeather;
-	</script>		
+	</script>
+	
 			
     <div class="main-content">
         <h1>🌪️ Dozer's Live Storm Chasing Team 🌪️</h1>
