@@ -285,7 +285,7 @@
 	      if (data.alert) {
 	        const alert = data.alert;
 	        document.getElementById("weatherAlert").innerHTML =
-	          `🚨 <strong>${data.alert.event}</strong>`;
+		`🚨 <strong>${alert.event}</strong><br>${alert.description}<br><em>${alert.sender}</em>`
 	      } else {
 	        document.getElementById("weatherAlert").innerHTML = "";
 	      }
@@ -389,7 +389,7 @@
 	      console.log("Alert data:", alert);  // 🔍 Log just the alert
 	
 	      document.getElementById("weatherAlert").innerHTML =
-		`🚨 <strong>${alert.event}</strong><br>${alert.description}<br><em>${alert.sender}</em>`;
+		`🚨 <strong>${alert.event}</strong><br>${alert.description}<br><em>${alert.sender}</em>`
 	    } else {
 	      document.getElementById("weatherAlert").innerHTML = "";
 	    }
