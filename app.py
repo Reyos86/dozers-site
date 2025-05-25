@@ -90,32 +90,35 @@ def get_weather():
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
 
     try:
-        # IP geolocation (fallback to Joplin if needed)
+        # Step 1: Get user's IP
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-        geo_res = requests.get(f"https://ipapi.co/{client_ip}/json/").json()
 
-        if geo_res.get("error") or not geo_res.get("latitude"):
+        # Step 2: Look up geolocation using ipwho.is
+        geo_res = requests.get(f"https://ipwho.is/{client_ip}")
+        geo_data = geo_res.json()
+
+        if geo_data.get("error") or not geo_data.get("latitude"):
             print("⚠️ Fallback to Joplin, MO")
             lat, lon, city, region = 37.0855, -94.5134, "Joplin", "MO"
         else:
-            lat = geo_res["latitude"]
-            lon = geo_res["longitude"]
-            city = geo_res.get("city", "Unknown")
-            region = geo_res.get("region", "Unknown")
+            lat = geo_data["latitude"]
+            lon = geo_data["longitude"]
+            city = geo_data.get("city", "Unknown")
+            region = geo_data.get("region", "Unknown")
 
-        # Fetch weather
+        # Step 3: Fetch weather from OpenWeather
         url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
         res = requests.get(url)
         weather_data = res.json()
 
-        # Current conditions
+        # Step 4: Parse current conditions
         current = weather_data.get("current", {})
         temperature = current.get("temp")
         description = current.get("weather", [{}])[0].get("description", "No description").title()
 
-        # Alerts
+        # Step 5: Parse alerts if available
         alert = None
-        if "alerts" in weather_data:
+        if "alerts" in weather_data and len(weather_data["alerts"]) > 0:
             alert_data = weather_data["alerts"][0]
             alert = {
                 "event": alert_data.get("event", "Weather Alert"),
