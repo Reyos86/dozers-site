@@ -90,8 +90,9 @@ def get_weather():
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
 
     try:
-        # ✅ Get client's IP
-        client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+        # ✅ Get clean IP from comma list
+        x_forwarded_for = request.headers.get('X-Forwarded-For', '')
+        client_ip = x_forwarded_for.split(',')[0].strip() if x_forwarded_for else request.remote_addr
 
         # ✅ Geolocation
         geo_res = requests.get(f"https://ipwho.is/{client_ip}")
