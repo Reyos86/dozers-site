@@ -87,10 +87,8 @@ def media():
 
 @app.route('/weather')
 def get_weather():
-    api_key = "35b5f6e19f2be4347afe5d6076b4d008"
-
     try:
-        # Get user's IP-based geolocation
+        # Step 1: Get user's IP address
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
         geo_res = requests.get(f"https://ipapi.co/{client_ip}/json/")
         geo_data = geo_res.json()
@@ -103,20 +101,21 @@ def get_weather():
         if not lat or not lon:
             raise Exception("Could not detect location")
 
-        # Fetch weather and alerts
+        # Step 2: Fetch weather and alerts from OpenWeatherMap One Call API
+        api_key = "35b5f6e19f2be4347afe5d6076b4d008"
         weather_url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
-        weather_res = requests.get(weather_url)
-        data = weather_res.json()
+        response = requests.get(weather_url)
+        data = response.json()
 
-        # Check for alert
+        # Step 3: Handle weather data and optional alerts
         alert = None
-        if "alerts" in data and len(data["alerts"]) > 0:
+        if "alerts" in data and data["alerts"]:
             alert_data = data["alerts"][0]
             alert = {
                 "event": alert_data.get("event"),
                 "description": alert_data.get("description"),
                 "sender": alert_data.get("sender_name"),
-                "link": alert_data.get("tags", [])
+                "tags": alert_data.get("tags", [])
             }
 
         return jsonify({
@@ -130,9 +129,7 @@ def get_weather():
         })
 
     except Exception as e:
-        print("Weather error:", e)
         return jsonify({"error": str(e)}), 500
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
