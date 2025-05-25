@@ -90,61 +90,65 @@ def get_weather():
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
 
     try:
-        # Step 1: Get IP
+        # STEP 1: Get IP address
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+        if client_ip and ',' in client_ip:
+            client_ip = client_ip.split(',')[0]  # Only use first IP
 
-        # Step 2: Attempt geolocation
+        print("Client IP:", client_ip)
+
+        # STEP 2: Get location from IP (via ipinfo.io)
         geo_res = requests.get(f"https://ipinfo.io/{client_ip}/json")
         geo_data = geo_res.json()
         print("Geo data:", geo_data)
-        
-        loc = geo_data.get("loc", "37.0855,-94.5134").split(',')
-        lat = loc[0]
-        lon = loc[1]
-        city = geo_data.get("city", "Joplin")
-        region = geo_data.get("region", "MO")
 
-        # Step 3: Fallback if IP geolocation failed
-        if not lat or not lon:
-            print("⚠️ Fallback to Joplin, MO")
-            lat = 37.0855
-            lon = -94.5134
-            city = "Joplin"
-            region = "MO"
+        # Fallback if IP lookup fails
+        if 'bogon' in geo_data or 'error' in geo_data or 'loc' not in geo_data:
+            print("⚠️ Geo IP lookup failed, using Joplin fallback.")
+            lat, lon = "37.0855", "-94.5134"
+            city, region = "Joplin", "MO"
+        else:
+            lat, lon = geo_data["loc"].split(',')
+            city = geo_data.get("city", "Joplin")
+            region = geo_data.get("region", "MO")
 
-        # Step 4: Fetch weather from OpenWeatherMap
+        # STEP 3: Get weather from OpenWeatherMap
         weather_url = (
             f"https://api.openweathermap.org/data/3.0/onecall?"
             f"lat={lat}&lon={lon}&appid={api_key}&units=imperial"
         )
         weather_res = requests.get(weather_url)
-
-        if weather_res.status_code != 200:
-            print("Weather API error:", weather_res.status_code, weather_res.text)
-            raise ValueError("Weather API failed")
-
         weather_data = weather_res.json()
-        temp = weather_data["current"]["temp"]
-        desc = weather_data["current"]["weather"][0]["description"].title()
+        print("Weather data:", weather_data)
 
-        # Optional: alerts
+        current = weather_data.get("current", {})
+        temperature = current.get("temp")
+        weather_descriptions = current.get("weather", [])
+        narrative = weather_descriptions[0]["description"].title() if weather_descriptions else "No description"
+
         alert = None
-        if "alerts" in weather_data and weather_data["alerts"]:
-            first = weather_data["alerts"][0]
+        alerts = weather_data.get("alerts", [])
+        if alerts:
+            a = alerts[0]
             alert = {
-                "event": first.get("event", "Alert"),
-                "description": first.get("description", "Details unavailable.")
+                "event": a.get("event"),
+                "description": a.get("description"),
+                "sender": a.get("sender_name"),
+                "tags": a.get("tags", [])
             }
 
         return jsonify({
-            "location": {"city": city, "region": region},
-            "temperature": temp,
-            "narrative": desc,
+            "location": {
+                "city": city,
+                "region": region
+            },
+            "temperature": temperature,
+            "narrative": narrative,
             "alert": alert
         })
 
     except Exception as e:
-        print("Weather error:", str(e))
+        print("Weather error:", e)
         return jsonify({"error": "Unable to load weather data."}), 500
 
 @app.route('/', methods=['GET', 'POST'])
