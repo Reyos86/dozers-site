@@ -282,10 +282,9 @@
 	      document.getElementById("weatherInfo").textContent = `${data.temperature}°F — ${data.narrative}`;
 	
 	      if (data.alert) {
-	        document.getElementById("weatherAlert").innerHTML = `
-	          🚨 <strong>${data.alert.event}</strong><br>
-	          ${data.alert.description}
-	        `;
+	      document.getElementById("weatherAlert").innerHTML =
+	        `🚨 ${data.alert.event}: ${data.alert.description}`;
+
 	      } else {
 	        document.getElementById("weatherAlert").innerHTML = "";
 	      }
