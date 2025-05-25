@@ -123,10 +123,12 @@ def get_weather():
 
         # ✅ Alerts
         alert = None
-        if "alerts" in weather_data:
+        if "alerts" in weather_data and len(weather_data["alerts"]) > 0:
             alert_data = weather_data["alerts"][0]
             alert = {
                 "event": alert_data.get("event", "Weather Alert"),
+                "description": alert_data.get("description", ""),
+                "sender": alert_data.get("sender_name", "")
             }
         
         return jsonify({
