@@ -272,41 +272,32 @@
 
 	<script>
 	  async function fetchWeather() {
-		try {
-		  const ipRes = await fetch("https://ipapi.co/json");
-		  const ipData = await ipRes.json();
-		  const city = ipData.city;
-		  const region = ipData.region;
-		  const lat = ipData.latitude;
-		  const lon = ipData.longitude;
-
-		  document.getElementById("weatherLocation").textContent = `${city}, ${region}`;
-
-		  const weatherRes = await fetch(`https://api.weather.com/v3/wx/conditions/current?geocode=${lat},${lon}&format=json&units=e&language=en-US&apiKey=497e85fd58f14e39be85fd58f1ee3956`);
-		  const data = await weatherRes.json();
-
-		  document.getElementById("weatherInfo").textContent =
-			`${data.temperature}°F — ${data.narrative}`;
-
-		  const alertRes = await fetch(`https://api.weather.com/v3/wx/alerts/headlines?geocode=${lat},${lon}&format=json&language=en-US&apiKey=497e85fd58f14e39be85fd58f1ee3956`);
-		  const alerts = await alertRes.json();
-
-		  if (data.alert) {
-		   document.getElementById("weatherAlert").innerHTML =
-		    `🚨 <strong>${data.alert.event}</strong>: ${data.alert.description}`;
-		}
-
-		catch (error) {
-		  console.error("Weather fetch failed:", error);
-		  document.getElementById("weatherLocation").textContent = "Unable to load weather data.";
-		}
-
+	    try {
+	      const res = await fetch("/weather");
+	      const data = await res.json();
+	
+	      if (data.error) throw new Error(data.error);
+	
+	      document.getElementById("weatherLocation").textContent =
+	        `${data.location.city}, ${data.location.region}`;
+	      document.getElementById("weatherInfo").textContent =
+	        `${data.temperature}°F — ${data.narrative}`;
+	
+	      if (data.alert) {
+	        document.getElementById("weatherAlert").innerHTML =
+	          `🚨 <strong>${data.alert.event}</strong>: ${data.alert.description}`;
+	      } else {
+	        document.getElementById("weatherAlert").textContent = "";
+	      }
+	    } catch (error) {
+	      console.error("Weather load error:", error);
+	      document.getElementById("weatherLocation").textContent = "Unable to load weather data.";
+	    }
 	  }
-
+	
 	  window.onload = fetchWeather;
 	</script>		
-		
-		
+			
     <div class="main-content">
         <h1>🌪️ Dozer's Live Storm Chasing Team 🌪️</h1>
         <img src="{{ url_for('static', filename='dozers.png') }}" alt="Dozer's Logo" style="width: 300px; height: auto;">
