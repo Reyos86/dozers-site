@@ -285,7 +285,7 @@
 	      if (data.alert) {
 	        const alert = data.alert;
 	        document.getElementById("weatherAlert").innerHTML =
-	          `🚨 <strong>${alert.event}</strong><br>${alert.description}<br><em>${alert.sender}</em>`;
+	          `🚨 <strong>${data.alert.event}</strong>`;
 	      } else {
 	        document.getElementById("weatherAlert").innerHTML = "";
 	      }
