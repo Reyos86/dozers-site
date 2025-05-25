@@ -270,7 +270,7 @@
 	  <div class="weather-alert" id="weatherAlert"></div>
 	</div>
 
-	<script>
+		<script>
 	  async function fetchWeather() {
 	    try {
 	      const res = await fetch("/weather");
@@ -281,10 +281,11 @@
 	      document.getElementById("weatherLocation").textContent = `${data.location.city}, ${data.location.region}`;
 	      document.getElementById("weatherInfo").textContent = `${data.temperature}°F — ${data.narrative}`;
 	
+	      // Show alert if available
 	      if (data.alert) {
-	      document.getElementById("weatherAlert").innerHTML =
-	        `🚨 ${data.alert.event}: ${data.alert.description}`;
-
+	        const alert = data.alert;
+	        document.getElementById("weatherAlert").innerHTML =
+	          `🚨 <strong>${alert.event}</strong><br>${alert.description}<br><em>${alert.sender}</em>`;
 	      } else {
 	        document.getElementById("weatherAlert").innerHTML = "";
 	      }
