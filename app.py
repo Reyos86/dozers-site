@@ -94,7 +94,7 @@ def get_weather():
 
     try:
         weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
-                response = requests.get(weather_url, timeout=10)
+        response = requests.get(weather_url, timeout=10)
 
         if response.status_code != 200:
             return jsonify({"error": f"Weather API error: {response.status_code}"}), 500
