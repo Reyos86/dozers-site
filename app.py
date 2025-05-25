@@ -96,8 +96,8 @@ def get_weather():
         # Step 2: Look up geolocation using ipwho.is
         geo_res = requests.get(f"https://ipwho.is/{client_ip}")
         geo_data = geo_res.json()
-
-        if geo_data.get("error") or not geo_data.get("latitude"):
+        
+        if geo_data.get("success") is False or not geo_data.get("latitude"):
             print("⚠️ Fallback to Joplin, MO")
             lat, lon, city, region = 37.0855, -94.5134, "Joplin", "MO"
         else:
@@ -105,6 +105,7 @@ def get_weather():
             lon = geo_data["longitude"]
             city = geo_data.get("city", "Unknown")
             region = geo_data.get("region", "Unknown")
+
 
         # Step 3: Fetch weather from OpenWeather
         url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
