@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Media - Dozer's Live Storm Chasing Team</title>
+  <link rel="icon" href="{{ url_for('static', filename='Dozerfavicon.png') }}" type="image/png">
   <style>
     body {
       margin: 0;
@@ -69,19 +70,19 @@
 <body>
   <div class="media-container">
     <h1>Viral Chase Clips</h1>
-	<div class="video-card">
-	  <iframe src="https://www.youtube.com/embed/aAAfM1QH_4Q" allowfullscreen></iframe>
-	  <div class="video-title">Short: Son of a Biscuit!</div>
-	</div>
-	<div class="video-card">
-	  <iframe src="https://www.youtube.com/embed/dO-2XaCT09M" allowfullscreen></iframe>
-	  <div class="video-title">Short: We Were NOT Making That!</div>
-	</div>
-	<div class="video-card">
-	  <iframe src="https://www.youtube.com/embed/BQOI4SCzEE8" allowfullscreen></iframe>
-	  <div class="video-title">Short: We Found a MONSTER!</div>
-	</div>
-      <!-- Add 3–6 more just like this -->
+    <div class="video-grid">
+      <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/aAAfM1QH_4Q" allowfullscreen></iframe>
+        <div class="video-title">Short: Son of a Biscuit!</div>
+      </div>
+      <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/dO-2XaCT09M" allowfullscreen></iframe>
+        <div class="video-title">Short: We Were NOT Making That!</div>
+      </div>
+      <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/BQOI4SCzEE8" allowfullscreen></iframe>
+        <div class="video-title">Short: We Found a MONSTER!</div>
+      </div>
     </div>
   </div>
 </body>
