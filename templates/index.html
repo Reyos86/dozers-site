@@ -291,11 +291,10 @@
 		  const alertRes = await fetch(`https://api.weather.com/v3/wx/alerts/headlines?geocode=${lat},${lon}&format=json&language=en-US&apiKey=497e85fd58f14e39be85fd58f1ee3956`);
 		  const alerts = await alertRes.json();
 
-		  if (alerts && alerts.alerts && alerts.alerts.length > 0) {
-			const alert = alerts.alerts[0];
-			document.getElementById("weatherAlert").innerHTML =
-			  `🚨 <a href="${alert.webLink}" target="_blank">${alert.headlineText}</a>`;
-		  }
+		if (data.alert) {
+		  document.getElementById("weatherAlert").innerHTML =
+		    `🚨 <strong>${data.alert.event}</strong>: ${data.alert.description}`;
+		}
 		} catch (error) {
 		  document.getElementById("weatherLocation").textContent = "Unable to load weather data.";
 		}
