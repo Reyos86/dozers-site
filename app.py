@@ -90,53 +90,61 @@ def get_weather():
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
 
     try:
-        # Get client's IP address
+        # Step 1: Get IP
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+
+        # Step 2: Attempt geolocation
         geo_res = requests.get(f"https://ipapi.co/{client_ip}/json/")
         geo_data = geo_res.json()
 
+        print("Geo data:", geo_data)
+        
         lat = geo_data.get("latitude")
         lon = geo_data.get("longitude")
-        city = geo_data.get("city", "Unknown")
-        region = geo_data.get("region", "Unknown")
+        city = geo_data.get("city", "Joplin")
+        region = geo_data.get("region", "MO")
 
+        # Step 3: Fallback if IP geolocation failed
         if not lat or not lon:
-            raise ValueError("Could not detect location")
+            print("⚠️ Fallback to Joplin, MO")
+            lat = 37.0855
+            lon = -94.5134
+            city = "Joplin"
+            region = "MO"
 
-        # Fetch weather data from OpenWeatherMap One Call API
-        url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
-        weather_res = requests.get(url)
+        # Step 4: Fetch weather from OpenWeatherMap
+        weather_url = (
+            f"https://api.openweathermap.org/data/3.0/onecall?"
+            f"lat={lat}&lon={lon}&appid={api_key}&units=imperial"
+        )
+        weather_res = requests.get(weather_url)
 
         if weather_res.status_code != 200:
             print("Weather API error:", weather_res.status_code, weather_res.text)
             raise ValueError("Weather API failed")
 
         weather_data = weather_res.json()
+        temp = weather_data["current"]["temp"]
+        desc = weather_data["current"]["weather"][0]["description"].title()
 
-        temperature = weather_data["current"]["temp"]
-        narrative = weather_data["current"]["weather"][0]["description"].title()
-
+        # Optional: alerts
         alert = None
         if "alerts" in weather_data and weather_data["alerts"]:
-            alert_data = weather_data["alerts"][0]
+            first = weather_data["alerts"][0]
             alert = {
-                "event": alert_data.get("event", "Alert"),
-                "description": alert_data.get("description", "Details unavailable.")
+                "event": first.get("event", "Alert"),
+                "description": first.get("description", "Details unavailable.")
             }
 
         return jsonify({
             "location": {"city": city, "region": region},
-            "temperature": temperature,
-            "narrative": narrative,
+            "temperature": temp,
+            "narrative": desc,
             "alert": alert
         })
 
     except Exception as e:
         print("Weather error:", str(e))
-        return jsonify({"error": "Unable to load weather data."}), 500
-
-    except Exception as e:
-        print("Weather error:", e)
         return jsonify({"error": "Unable to load weather data."}), 500
 
 @app.route('/', methods=['GET', 'POST'])
