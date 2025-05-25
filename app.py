@@ -92,23 +92,35 @@ def get_weather():
     lon = -94.5134
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
 
-    try:
+try:
+        # Step 1: Get IP address of the visitor
+        client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+
+        # Step 2: Get geolocation info
+        geo_res = requests.get(f"https://ipapi.co/{client_ip}/json/")
+        geo_data = geo_res.json()
+
+        lat = geo_data.get("latitude")
+        lon = geo_data.get("longitude")
+        city = geo_data.get("city", "Unknown")
+        region = geo_data.get("region", "")
+
+        if not lat or not lon:
+            raise Exception("Could not detect location")
+
+        # Step 3: Fetch weather from OpenWeatherMap
         weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
-        response = requests.get(weather_url, timeout=10)
-
-        if response.status_code != 200:
-            return jsonify({"error": f"Weather API error: {response.status_code}"}), 500
-
-        data = response.json()
+        weather_res = requests.get(weather_url)
+        data = weather_res.json()
 
         return jsonify({
             "location": {
-                "city": data.get("name"),
-                "region": "MO"
+                "city": city,
+                "region": region
             },
             "temperature": data["main"]["temp"],
             "narrative": data["weather"][0]["description"].title(),
-            "alert": None  # OpenWeatherMap alerts require One Call API — optional
+            "alert": None  # Add alert support later
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
