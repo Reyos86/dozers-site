@@ -283,9 +283,11 @@
 	
 	      // Show alert if available
 	      if (data.alert) {
-	        const alert = data.alert;
-	        document.getElementById("weatherAlert").innerHTML =
-		`🚨 <strong>${alert.event}</strong><br>${alert.description}<br><em>${alert.sender}</em>`
+	      const alert = data.alert;
+	      document.getElementById("weatherAlert").innerHTML =
+	        `🚨 <strong>${alert.event}</strong><br><em>${alert.sender}</em>`;
+	}
+
 	      } else {
 	        document.getElementById("weatherAlert").innerHTML = "";
 	      }
