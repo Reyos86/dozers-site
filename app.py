@@ -90,10 +90,8 @@ def get_weather():
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
 
     try:
-        # Step 1: Get client IP
+        # Get user's IP-based geolocation
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-
-        # Step 2: Lookup IP location
         geo_res = requests.get(f"https://ipapi.co/{client_ip}/json/")
         geo_data = geo_res.json()
 
@@ -105,23 +103,20 @@ def get_weather():
         if not lat or not lon:
             raise Exception("Could not detect location")
 
-        # Step 3: Get current weather
-        weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
+        # Fetch weather and alerts
+        weather_url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
         weather_res = requests.get(weather_url)
-        weather_data = weather_res.json()
+        data = weather_res.json()
 
-        # Step 4: Get weather alerts using One Call API 3.0
-        alerts_url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
-        alerts_res = requests.get(alerts_url)
-        alerts_data = alerts_res.json()
-
-        alert_info = None
-        if "alerts" in alerts_data and alerts_data["alerts"]:
-            first_alert = alerts_data["alerts"][0]
-            alert_info = {
-                "event": first_alert.get("event"),
-                "description": first_alert.get("description"),
-                "link": "https://www.weather.gov/"
+        # Check for alert
+        alert = None
+        if "alerts" in data and len(data["alerts"]) > 0:
+            alert_data = data["alerts"][0]
+            alert = {
+                "event": alert_data.get("event"),
+                "description": alert_data.get("description"),
+                "sender": alert_data.get("sender_name"),
+                "link": alert_data.get("tags", [])
             }
 
         return jsonify({
@@ -129,12 +124,13 @@ def get_weather():
                 "city": city,
                 "region": region
             },
-            "temperature": weather_data["main"]["temp"],
-            "narrative": weather_data["weather"][0]["description"].title(),
-            "alert": alert_info
+            "temperature": data["current"]["temp"],
+            "narrative": data["current"]["weather"][0]["description"].title(),
+            "alert": alert
         })
 
     except Exception as e:
+        print("Weather error:", e)
         return jsonify({"error": str(e)}), 500
 
 
