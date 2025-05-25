@@ -90,60 +90,45 @@ def get_weather():
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
 
     try:
-        # STEP 1: Get IP address
+        # IP geolocation (fallback to Joplin if needed)
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-        if client_ip and ',' in client_ip:
-            client_ip = client_ip.split(',')[0]  # Only use first IP
+        geo_res = requests.get(f"https://ipapi.co/{client_ip}/json/").json()
 
-        print("Client IP:", client_ip)
-
-        # STEP 2: Get location from IP (via ipinfo.io)
-        geo_res = requests.get(f"https://ipinfo.io/{client_ip}/json")
-        geo_data = geo_res.json()
-        print("Geo data:", geo_data)
-
-        # Fallback if IP lookup fails
-        if 'bogon' in geo_data or 'error' in geo_data or 'loc' not in geo_data:
-            print("⚠️ Geo IP lookup failed, using Joplin fallback.")
-            lat, lon = "37.0855", "-94.5134"
-            city, region = "Joplin", "MO"
+        if geo_res.get("error") or not geo_res.get("latitude"):
+            print("⚠️ Fallback to Joplin, MO")
+            lat, lon, city, region = 37.0855, -94.5134, "Joplin", "MO"
         else:
-            lat, lon = geo_data["loc"].split(',')
-            city = geo_data.get("city", "Joplin")
-            region = geo_data.get("region", "MO")
+            lat = geo_res["latitude"]
+            lon = geo_res["longitude"]
+            city = geo_res.get("city", "Unknown")
+            region = geo_res.get("region", "Unknown")
 
-        # STEP 3: Get weather from OpenWeatherMap
-        weather_url = (
-            f"https://api.openweathermap.org/data/3.0/onecall?"
-            f"lat={lat}&lon={lon}&appid={api_key}&units=imperial"
-        )
-        weather_res = requests.get(weather_url)
-        weather_data = weather_res.json()
-        print("Weather data:", weather_data)
+        # Fetch weather
+        url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
+        res = requests.get(url)
+        weather_data = res.json()
 
+        # Current conditions
         current = weather_data.get("current", {})
         temperature = current.get("temp")
-        weather_descriptions = current.get("weather", [])
-        narrative = weather_descriptions[0]["description"].title() if weather_descriptions else "No description"
+        description = current.get("weather", [{}])[0].get("description", "No description").title()
 
+        # Alerts
         alert = None
-        alerts = weather_data.get("alerts", [])
-        if alerts:
-            a = alerts[0]
+        if "alerts" in weather_data:
+            alert_data = weather_data["alerts"][0]
             alert = {
-                "event": a.get("event"),
-                "description": a.get("description"),
-                "sender": a.get("sender_name"),
-                "tags": a.get("tags", [])
+                "event": alert_data.get("event", "Weather Alert"),
+                "description": alert_data.get("description", ""),
+                "sender": alert_data.get("sender_name", ""),
+                "start": alert_data.get("start"),
+                "end": alert_data.get("end")
             }
 
         return jsonify({
-            "location": {
-                "city": city,
-                "region": region
-            },
+            "location": {"city": city, "region": region},
             "temperature": temperature,
-            "narrative": narrative,
+            "narrative": description,
             "alert": alert
         })
 
