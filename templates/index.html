@@ -219,7 +219,37 @@
 		  border: none;
 		  border-radius: 12px;
 		}
-	    
+		
+		  .weather-widget {
+			max-width: 600px;
+			margin: 20px auto 40px;
+			padding: 20px;
+			background: rgba(0,0,0,0.65);
+			border-radius: 12px;
+			color: #eee;
+			font-family: Arial, sans-serif;
+			box-shadow: 0 0 10px rgba(0,0,0,0.4);
+			text-align: center;
+		  }
+
+		  .weather-location {
+			font-size: 1.4em;
+			font-weight: bold;
+			margin-bottom: 10px;
+			color: #00aaff;
+		  }
+
+		  .weather-info {
+			font-size: 1em;
+			margin-bottom: 10px;
+		  }
+
+		  .weather-alert a {
+			color: #ff4c4c;
+			font-weight: bold;
+			text-decoration: underline;
+		  }		
+			
     </style>
 </head>
 <body>
@@ -232,6 +262,48 @@
 	  <a href="https://www.wunderground.com/" target="_blank">Live Weather</a>
 								
 	</div>
+		
+	<!-- Weather Widget Section -->
+	<div class="weather-widget" id="weatherWidget">
+	  <div class="weather-location" id="weatherLocation">Loading location...</div>
+	  <div class="weather-info" id="weatherInfo"></div>
+	  <div class="weather-alert" id="weatherAlert"></div>
+	</div>
+
+	<script>
+	  async function fetchWeather() {
+		try {
+		  const ipRes = await fetch("https://ipapi.co/json");
+		  const ipData = await ipRes.json();
+		  const city = ipData.city;
+		  const region = ipData.region;
+		  const lat = ipData.latitude;
+		  const lon = ipData.longitude;
+
+		  document.getElementById("weatherLocation").textContent = `${city}, ${region}`;
+
+		  const weatherRes = await fetch(`https://api.weather.com/v3/wx/conditions/current?geocode=${lat},${lon}&format=json&units=e&language=en-US&apiKey=497e85fd58f14e39be85fd58f1ee3956`);
+		  const data = await weatherRes.json();
+
+		  document.getElementById("weatherInfo").textContent =
+			`${data.temperature}°F — ${data.narrative}`;
+
+		  const alertRes = await fetch(`https://api.weather.com/v3/wx/alerts/headlines?geocode=${lat},${lon}&format=json&language=en-US&apiKey=497e85fd58f14e39be85fd58f1ee3956`);
+		  const alerts = await alertRes.json();
+
+		  if (alerts && alerts.alerts && alerts.alerts.length > 0) {
+			const alert = alerts.alerts[0];
+			document.getElementById("weatherAlert").innerHTML =
+			  `🚨 <a href="${alert.webLink}" target="_blank">${alert.headlineText}</a>`;
+		  }
+		} catch (error) {
+		  document.getElementById("weatherLocation").textContent = "Unable to load weather data.";
+		}
+	  }
+
+	  window.onload = fetchWeather;
+	</script>		
+		
 		
     <div class="main-content">
         <h1>🌪️ Dozer's Live Storm Chasing Team 🌪️</h1>
@@ -301,5 +373,27 @@
             {% endfor %}
         </ul>
     </div>
+	
+	<script>
+	  async function fetchWeather() {
+		try {
+		  const res = await fetch("/weather");
+		  const data = await res.json();
+
+		  if (data.error) throw new Error(data.error);
+
+		  document.getElementById("weatherLocation").textContent = `${data.location.city}, ${data.location.region}`;
+		  document.getElementById("weatherInfo").textContent = `${data.temperature}°F — ${data.narrative}`;
+
+		  if (data.alert) {
+			document.getElementById("weatherAlert").innerHTML = `🚨 <a href="${data.alert.webLink}" target="_blank">${data.alert.headlineText}</a>`;
+		  }
+		} catch (error) {
+		  document.getElementById("weatherLocation").textContent = "Unable to load weather data.";
+		}
+	  }
+
+	  window.onload = fetchWeather;
+</script>
 </body>
 </html>
