@@ -92,8 +92,6 @@ def get_weather():
     try:
         # Get client's IP address
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-
-        # Retrieve geolocation data based on IP
         geo_res = requests.get(f"https://ipapi.co/{client_ip}/json/")
         geo_data = geo_res.json()
 
@@ -105,41 +103,37 @@ def get_weather():
         if not lat or not lon:
             raise ValueError("Could not detect location")
 
-        # Fetch weather data from OpenWeatherMap One Call API 3.0
-        weather_url = (
-            f"https://api.openweathermap.org/data/3.0/onecall?"
-            f"lat={lat}&lon={lon}&appid={api_key}&units=imperial"
-        )
-        weather_res = requests.get(weather_url)
+        # Fetch weather data from OpenWeatherMap One Call API
+        url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
+        weather_res = requests.get(url)
+
+        if weather_res.status_code != 200:
+            print("Weather API error:", weather_res.status_code, weather_res.text)
+            raise ValueError("Weather API failed")
+
         weather_data = weather_res.json()
 
-        # Extract current weather information
-        current = weather_data.get("current", {})
-        temperature = current.get("temp")
-        weather_descriptions = current.get("weather", [])
-        narrative = weather_descriptions[0]["description"].title() if weather_descriptions else "No description available"
+        temperature = weather_data["current"]["temp"]
+        narrative = weather_data["current"]["weather"][0]["description"].title()
 
-        # Extract alert information if available
-        alerts = weather_data.get("alerts", [])
         alert = None
-        if alerts:
-            first_alert = alerts[0]
+        if "alerts" in weather_data and weather_data["alerts"]:
+            alert_data = weather_data["alerts"][0]
             alert = {
-                "event": first_alert.get("event"),
-                "description": first_alert.get("description"),
-                "sender": first_alert.get("sender_name"),
-                "tags": first_alert.get("tags", [])
+                "event": alert_data.get("event", "Alert"),
+                "description": alert_data.get("description", "Details unavailable.")
             }
 
         return jsonify({
-            "location": {
-                "city": city,
-                "region": region
-            },
+            "location": {"city": city, "region": region},
             "temperature": temperature,
             "narrative": narrative,
             "alert": alert
         })
+
+    except Exception as e:
+        print("Weather error:", str(e))
+        return jsonify({"error": "Unable to load weather data."}), 500
 
     except Exception as e:
         print("Weather error:", e)
