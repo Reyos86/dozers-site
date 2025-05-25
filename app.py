@@ -90,43 +90,44 @@ def get_weather():
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
 
     try:
-        # Step 1: Get user's IP
+        # ✅ Get client's IP
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
 
-        # Step 2: Look up geolocation using ipwho.is
+        # ✅ Geolocation
         geo_res = requests.get(f"https://ipwho.is/{client_ip}")
         geo_data = geo_res.json()
-        
-        if geo_data.get("success") is False or not geo_data.get("latitude"):
+        print("Geo data:", geo_data)
+
+        # ✅ Fallback if IP lookup fails
+        if not geo_data.get("success"):
             print("⚠️ Fallback to Joplin, MO")
-            lat, lon, city, region = 37.0855, -94.5134, "Joplin", "MO"
+            lat, lon = 37.0855, -94.5134
+            city, region = "Joplin", "MO"
         else:
-            lat = geo_data["latitude"]
-            lon = geo_data["longitude"]
+            lat = geo_data.get("latitude")
+            lon = geo_data.get("longitude")
             city = geo_data.get("city", "Unknown")
             region = geo_data.get("region", "Unknown")
 
-
-        # Step 3: Fetch weather from OpenWeather
+        # ✅ Weather API call
         url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
         res = requests.get(url)
         weather_data = res.json()
+        print("Weather data:", weather_data)
 
-        # Step 4: Parse current conditions
+        # ✅ Current Weather
         current = weather_data.get("current", {})
         temperature = current.get("temp")
         description = current.get("weather", [{}])[0].get("description", "No description").title()
 
-        # Step 5: Parse alerts if available
+        # ✅ Alerts
         alert = None
-        if "alerts" in weather_data and len(weather_data["alerts"]) > 0:
+        if "alerts" in weather_data:
             alert_data = weather_data["alerts"][0]
             alert = {
                 "event": alert_data.get("event", "Weather Alert"),
                 "description": alert_data.get("description", ""),
-                "sender": alert_data.get("sender_name", ""),
-                "start": alert_data.get("start"),
-                "end": alert_data.get("end")
+                "sender": alert_data.get("sender_name", "")
             }
 
         return jsonify({
@@ -139,7 +140,7 @@ def get_weather():
     except Exception as e:
         print("Weather error:", e)
         return jsonify({"error": "Unable to load weather data."}), 500
-
+        
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
