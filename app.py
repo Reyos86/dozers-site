@@ -90,23 +90,25 @@ def get_weather():
     # Static for Joplin, MO
     lat = 37.0855
     lon = -94.5134
-    api_key = "497e85fd58f14e39be85fd58f1ee3956"
+    api_key = "35b5f6e19f2be4347afe5d6076b4d008"
 
     try:
-        weather_url = f"https://api.weather.com/v3/wx/conditions/current?geocode={lat},{lon}&format=json&units=e&language=en-US&apiKey={api_key}"
-        alerts_url = f"https://api.weather.com/v3/wx/alerts/headlines?geocode={lat},{lon}&format=json&language=en-US&apiKey={api_key}"
+        weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
+                response = requests.get(weather_url, timeout=10)
 
-        weather_data = requests.get(weather_url).json()
-        alerts_data = requests.get(alerts_url).json()
+        if response.status_code != 200:
+            return jsonify({"error": f"Weather API error: {response.status_code}"}), 500
+
+        data = response.json()
 
         return jsonify({
             "location": {
-                "city": "Joplin",
+                "city": data.get("name"),
                 "region": "MO"
             },
-            "temperature": weather_data.get("temperature"),
-            "narrative": weather_data.get("narrative"),
-            "alert": alerts_data.get("alerts", [{}])[0] if alerts_data.get("alerts") else None
+            "temperature": data["main"]["temp"],
+            "narrative": data["weather"][0]["description"].title(),
+            "alert": None  # OpenWeatherMap alerts require One Call API — optional
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
