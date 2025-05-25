@@ -87,49 +87,46 @@ def media():
 
 @app.route('/weather')
 def get_weather():
+    api_key = "35b5f6e19f2be4347afe5d6076b4d008"
+
     try:
-        # Step 1: Get user's IP address
+        # Step 1: Get user IP address
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+
+        # Step 2: Get location info from IP
         geo_res = requests.get(f"https://ipapi.co/{client_ip}/json/")
         geo_data = geo_res.json()
 
         lat = geo_data.get("latitude")
         lon = geo_data.get("longitude")
         city = geo_data.get("city", "Unknown")
-        region = geo_data.get("region", "")
+        region = geo_data.get("region", "Unknown")
 
         if not lat or not lon:
-            raise Exception("Could not detect location")
+            raise Exception("Could not determine location.")
 
-        # Step 2: Fetch weather and alerts from OpenWeatherMap One Call API
-        api_key = "35b5f6e19f2be4347afe5d6076b4d008"
+        # Step 3: Get weather from OpenWeatherMap v2.5
         weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
-        response = requests.get(weather_url)
-        data = response.json()
+        weather_res = requests.get(weather_url)
+        weather_data = weather_res.json()
 
-        # Step 3: Handle weather data and optional alerts
-#        alert = None
- #       if "alerts" in data and data["alerts"]:
- #           alert_data = data["alerts"][0]
-  #          alert = {
-   #             "event": alert_data.get("event"),
-    #            "description": alert_data.get("description"),
-     #           "sender": alert_data.get("sender_name"),
-      #          "tags": alert_data.get("tags", [])
-       #     }
+        # Safety check
+        if "main" not in weather_data or "weather" not in weather_data:
+            raise Exception("Invalid weather response")
 
         return jsonify({
             "location": {
                 "city": city,
                 "region": region
             },
-            "temperature": data["current"]["temp"],
-            "narrative": data["current"]["weather"][0]["description"].title(),
-            "alert": None
+            "temperature": weather_data["main"]["temp"],
+            "narrative": weather_data["weather"][0]["description"].title(),
+            "alert": None  # Add later if needed
         })
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print("Weather error:", e)
+        return jsonify({"error": "Unable to load weather data."}), 500
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
