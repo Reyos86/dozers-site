@@ -90,8 +90,10 @@ def get_weather():
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
 
     try:
-        # Get IP-based location
+        # Get client's IP address
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+
+        # Retrieve geolocation data based on IP
         geo_res = requests.get(f"https://ipapi.co/{client_ip}/json/")
         geo_data = geo_res.json()
 
@@ -101,24 +103,42 @@ def get_weather():
         region = geo_data.get("region", "Unknown")
 
         if not lat or not lon:
-            raise Exception("Could not detect location")
+            raise ValueError("Could not detect location")
 
-        # Fetch weather using OpenWeatherMap v2.5
-        weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
+        # Fetch weather data from OpenWeatherMap One Call API 3.0
+        weather_url = (
+            f"https://api.openweathermap.org/data/3.0/onecall?"
+            f"lat={lat}&lon={lon}&appid={api_key}&units=imperial"
+        )
         weather_res = requests.get(weather_url)
         weather_data = weather_res.json()
 
-        if "main" not in weather_data or "weather" not in weather_data:
-            raise Exception("Invalid weather response")
+        # Extract current weather information
+        current = weather_data.get("current", {})
+        temperature = current.get("temp")
+        weather_descriptions = current.get("weather", [])
+        narrative = weather_descriptions[0]["description"].title() if weather_descriptions else "No description available"
+
+        # Extract alert information if available
+        alerts = weather_data.get("alerts", [])
+        alert = None
+        if alerts:
+            first_alert = alerts[0]
+            alert = {
+                "event": first_alert.get("event"),
+                "description": first_alert.get("description"),
+                "sender": first_alert.get("sender_name"),
+                "tags": first_alert.get("tags", [])
+            }
 
         return jsonify({
             "location": {
                 "city": city,
                 "region": region
             },
-            "temperature": weather_data["main"]["temp"],
-            "narrative": weather_data["weather"][0]["description"].title(),
-            "alert": None  # Alerts will be added back after confirming this works
+            "temperature": temperature,
+            "narrative": narrative,
+            "alert": alert
         })
 
     except Exception as e:
