@@ -87,16 +87,13 @@ def media():
 
 @app.route('/weather')
 def get_weather():
-    # Static for Joplin, MO
-    lat = 37.0855
-    lon = -94.5134
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
 
-try:
-        # Step 1: Get IP address of the visitor
+    try:
+        # Step 1: Get client IP
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
 
-        # Step 2: Get geolocation info
+        # Step 2: Lookup IP location
         geo_res = requests.get(f"https://ipapi.co/{client_ip}/json/")
         geo_data = geo_res.json()
 
@@ -108,22 +105,38 @@ try:
         if not lat or not lon:
             raise Exception("Could not detect location")
 
-        # Step 3: Fetch weather from OpenWeatherMap
+        # Step 3: Get current weather
         weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
         weather_res = requests.get(weather_url)
-        data = weather_res.json()
+        weather_data = weather_res.json()
+
+        # Step 4: Get weather alerts using One Call API 3.0
+        alerts_url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
+        alerts_res = requests.get(alerts_url)
+        alerts_data = alerts_res.json()
+
+        alert_info = None
+        if "alerts" in alerts_data and alerts_data["alerts"]:
+            first_alert = alerts_data["alerts"][0]
+            alert_info = {
+                "event": first_alert.get("event"),
+                "description": first_alert.get("description"),
+                "link": "https://www.weather.gov/"
+            }
 
         return jsonify({
             "location": {
                 "city": city,
                 "region": region
             },
-            "temperature": data["main"]["temp"],
-            "narrative": data["weather"][0]["description"].title(),
-            "alert": None  # Add alert support later
+            "temperature": weather_data["main"]["temp"],
+            "narrative": weather_data["weather"][0]["description"].title(),
+            "alert": alert_info
         })
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
