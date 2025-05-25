@@ -278,19 +278,18 @@
 	
 	      if (data.error) throw new Error(data.error);
 	
-	      document.getElementById("weatherLocation").textContent =
-	        `${data.location.city}, ${data.location.region}`;
-	      document.getElementById("weatherInfo").textContent =
-	        `${data.temperature}°F — ${data.narrative}`;
+	      document.getElementById("weatherLocation").textContent = `${data.location.city}, ${data.location.region}`;
+	      document.getElementById("weatherInfo").textContent = `${data.temperature}°F — ${data.narrative}`;
 	
 	      if (data.alert) {
-	        document.getElementById("weatherAlert").innerHTML =
-	          `🚨 <strong>${data.alert.event}</strong>: ${data.alert.description}`;
+	        const alert = data.alert;
+	        const alertHTML = `🚨 <strong>${alert.event}</strong><br>${alert.description}`;
+	        document.getElementById("weatherAlert").innerHTML = alertHTML;
 	      } else {
-	        document.getElementById("weatherAlert").textContent = "";
+	        document.getElementById("weatherAlert").innerHTML = "";
 	      }
 	    } catch (error) {
-	      console.error("Weather load error:", error);
+	      console.error(error);
 	      document.getElementById("weatherLocation").textContent = "Unable to load weather data.";
 	    }
 	  }
