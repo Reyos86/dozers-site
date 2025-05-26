@@ -267,6 +267,7 @@
 	<div class="weather-widget" id="weatherWidget">
 	  <div class="weather-location" id="weatherLocation">Loading location...</div>
 	  <div class="weather-info" id="weatherInfo"></div>
+ 	  <img id="weatherIcon" alt="weather icon" style="width: 50px; height: 50px;">		
 	  <div class="weather-alert" id="weatherAlert"></div>
 	</div>
 
@@ -275,12 +276,14 @@
 	    try {
 	      const res = await fetch("/weather");
 	      const data = await res.json();
+	      const iconCode = data.icon;	    
 	
 	      if (data.error) throw new Error(data.error);
 	
 	      document.getElementById("weatherLocation").textContent = `${data.location.city}, ${data.location.region}`;
 	      document.getElementById("weatherInfo").textContent = `${Math.round(data.temperature)}°F — ${data.narrative}`;
-	
+	      document.getElementById("weatherIcon").src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+		    
 	      // Show alert if available
 	      if (data.alert) {
 	      const alert = data.alert;
