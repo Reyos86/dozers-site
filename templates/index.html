@@ -277,6 +277,7 @@
 	    try {
 	      const res = await fetch("/weather");
 	      const data = await res.json();
+	      console.log("Icon code:", data.icon);
 	      const iconCode = data.icon;	    
 	
 	      if (data.error) throw new Error(data.error);
