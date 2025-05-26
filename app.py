@@ -120,6 +120,7 @@ def get_weather():
         current = weather_data.get("current", {})
         temperature = current.get("temp")
         description = current.get("weather", [{}])[0].get("description", "No description").title()
+        icon = current.get("weather", [{}])[0].get("icon", "")
 
         # ✅ Alerts
         alert = None
@@ -135,6 +136,7 @@ def get_weather():
             "location": {"city": city, "region": region},
             "temperature": temperature,
             "narrative": description,
+            "icon": icon,
             "alert": alert
         })
 
