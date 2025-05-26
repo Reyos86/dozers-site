@@ -121,7 +121,6 @@ def get_weather():
         temperature = current.get("temp")
         description = current.get("weather", [{}])[0].get("description", "No description").title()
         icon = current.get("weather", [{}])[0].get("icon", "")
-        console.log("Icon code:", data.icon);
 
         # ✅ Alerts
         alert = None
