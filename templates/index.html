@@ -376,39 +376,6 @@
             {% endfor %}
         </ul>
     </div>
-	
-	<script>
-	async function fetchWeather() {
-	  try {
-	    const res = await fetch("/weather");
-	    const data = await res.json();
-	
-	    console.log("Weather API response:", data);  // 🔍 Log the full response
-	
-	    if (data.error) throw new Error(data.error);
-	
-	    document.getElementById("weatherLocation").textContent =
-	      `${data.location.city}, ${data.location.region}`;
-	
-	    document.getElementById("weatherInfo").textContent =
-	      `${Math.round(data.temperature)}°F — ${data.narrative}`;
-	
-	    if (data.alert) {
-	    const alert = data.alert;
-            document.getElementById("weatherAlert").innerHTML =
-              `🚨 <strong>${alert.event}</strong><br><em>${alert.sender}</em>`;
-	    } else {
-	      document.getElementById("weatherAlert").innerHTML = "";
-	    }
-	  } catch (error) {
-	    console.error("JS error:", error);
-	    document.getElementById("weatherLocation").textContent =
-	      "Unable to load weather data.";
-	  }
-	}
-
-
-	  window.onload = fetchWeather;
 </script>
 </body>
 </html>
