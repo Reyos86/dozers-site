@@ -268,33 +268,35 @@
 	  <div class="weather-location" id="weatherLocation">Loading location...</div>
 	  <div class="weather-info" id="weatherInfo"></div>
   	  <span id="weatherText"></span>
-  	  <img id="weatherIcon" style="width: 32px; vertical-align: middle;" alt="Weather icon">		
+          <img id="weatherIcon" style="width: 32px; vertical-align: middle; display: none;" alt="Weather icon">	
 	  <div class="weather-alert" id="weatherAlert"></div>
 	</div>
 
-		<script>
+	<script>
 	  async function fetchWeather() {
 	    try {
 	      const res = await fetch("/weather");
 	      const data = await res.json();
-	      console.log("Icon code:", data.icon);
-	      const iconCode = data.icon;	    
 	
 	      if (data.error) throw new Error(data.error);
 	
+	      // Location and temperature
 	      document.getElementById("weatherLocation").textContent = `${data.location.city}, ${data.location.region}`;
-	      document.getElementById("weatherInfo").textContent = `${Math.round(data.temperature)}°F — ${data.narrative}`;
-	      document.getElementById("weatherIcon").src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-		    
-	      // Show alert if available
+	      document.getElementById("weatherText").textContent = `${Math.round(data.temperature)}°F — ${data.narrative}`;
+	
+	      // Weather icon
+	      const iconCode = data.icon;
+	      const iconImg = document.getElementById("weatherIcon");
+	      iconImg.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+	      iconImg.style.display = "inline"; // only show after src is set
+	
+	      // Alert
 	      if (data.alert) {
-	      const alert = data.alert;
-	      document.getElementById("weatherAlert").innerHTML =
-		`🚨 <strong>${alert.event}</strong><br><em>${alert.sender}</em>`;
-	}
-
-	      else {
-	        document.getElementById("weatherAlert").innerHTML = "";
+		const alert = data.alert;
+		document.getElementById("weatherAlert").innerHTML =
+		  `🚨 <strong>${alert.event}</strong><br><em>${alert.sender}</em>`;
+	      } else {
+		document.getElementById("weatherAlert").innerHTML = "";
 	      }
 	    } catch (error) {
 	      console.error("JS error:", error);
