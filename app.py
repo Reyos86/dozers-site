@@ -109,7 +109,7 @@ def twitch_status():
 
 @app.route('/youtube_status')
 def youtube_status():
-    api_key = os.environ.get("AIzaSyANJffTPuadaGCnDcqpTs-B20e74Msp7Zs")
+    api_key = "AIzaSyANJffTPuadaGCnDcqpTs-B20e74Msp7Zs"
     channel_id = "UClkdz-_SpaJkgcIktqtfPdg"  # Replace with DarkShockGamer1's actual channel ID
 
     url = "https://www.googleapis.com/youtube/v3/search"
