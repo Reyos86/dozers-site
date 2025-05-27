@@ -254,7 +254,23 @@
 			color: #ff4c4c;
 			font-weight: bold;
 			text-decoration: underline;
-		  }		
+		  }	
+		 .live-grid {
+		   display: flex;
+		   flex-wrap: wrap;
+		   justify-content: center;
+		   gap: 20px;
+		}
+		
+		.live-card {
+		  background: #111;
+		  border-radius: 12px;
+		  padding: 10px;
+		  width: 360px;
+		  color: #fff;
+		  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+		  text-align: center;
+		}
 			
     </style>
 </head>
@@ -310,7 +326,53 @@
 	    }
 	  }
 	
-	  window.onload = fetchWeather;
+	  const twitchUsername = "reyos86";
+	  const youtubeChannelId = "UC9Axj_H3CFbO9NBEgY4c1kA"; // Replace with actual channel ID of @DarkShockGamer1
+	
+	  async function checkLiveStreams() {
+	    const liveContainer = document.getElementById("live-streams");
+	    let liveCount = 0;
+	
+	    // Twitch Embed
+	    const twitchEmbed = document.createElement("div");
+	    twitchEmbed.innerHTML = `
+	      <div class="live-card">
+		<iframe
+		  src="https://player.twitch.tv/?channel=${twitchUsername}&parent=${location.hostname}"
+		  height="300"
+		  width="100%"
+		  allowfullscreen>
+		</iframe>
+		<p><strong>${twitchUsername}</strong> is live on Twitch!</p>
+	      </div>`;
+	    liveContainer.appendChild(twitchEmbed);
+	    liveCount++;
+	
+	    // YouTube Embed
+	    const youtubeEmbed = document.createElement("div");
+	    youtubeEmbed.innerHTML = `
+	      <div class="live-card">
+		<iframe
+		  src="https://www.youtube.com/embed/live_stream?channel=${youtubeChannelId}"
+		  height="300"
+		  width="100%"
+		  allowfullscreen>
+		</iframe>
+		<p><strong>DarkShockGamer1</strong> is live on YouTube!</p>
+	      </div>`;
+	    liveContainer.appendChild(youtubeEmbed);
+	    liveCount++;
+	
+	    // Show the section only if at least one stream is embedded
+	    if (liveCount > 0) {
+	      document.getElementById("live-now").style.display = "block";
+	    }
+	  }
+
+	  window.onload = function () {
+	    fetchWeather();
+	    checkLiveStreams();
+	  };		
 	</script>
 	
 			
@@ -324,6 +386,11 @@
         </p>
     </div>
 
+     <div id="live-now" class="live-now-section" style="display:none;">
+       <h2>🔴 Live Storm Chasers</h2>
+       <div id="live-streams" class="live-grid"></div>
+     </div>
+	
 	<div class="about-section">
 		<h2>About Us</h2>
 		<p>
