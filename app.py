@@ -85,6 +85,28 @@ founders = [
 def media():
     return render_template('media.html')
 
+@app.route('/twitch_status')
+def twitch_status():
+    client_id = os.environ.get("TWITCH_CLIENT_ID")
+    access_token = os.environ.get("TWITCH_ACCESS_TOKEN")
+
+    headers = {
+        "Client-ID": client_id,
+        "Authorization": f"Bearer {access_token}"
+    }
+
+    params = {
+        "user_login": "reyos86"
+    }
+
+    response = requests.get("https://api.twitch.tv/helix/streams", headers=headers, params=params)
+    data = response.json()
+    
+    if data.get("data"):
+        return jsonify({"live": True})
+    else:
+        return jsonify({"live": False})
+
 @app.route('/weather')
 def get_weather():
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
