@@ -110,24 +110,51 @@ def twitch_status():
 @app.route('/youtube_status')
 def youtube_status():
     api_key = "AIzaSyANJffTPuadaGCnDcqpTs-B20e74Msp7Zs"
-    channel_id = "UClkdz-_SpaJkgcIktqtfPdg"  # Replace with DarkShockGamer1's actual channel ID
-
-    url = "https://www.googleapis.com/youtube/v3/search"
-    params = {
-        "part": "snippet",
-        "channelId": channel_id,
-        "eventType": "live",
-        "type": "video",
-        "key": api_key
+    channel_ids = { 
+        "DarkShockGamer1": "UClkdz-_SpaJkgcIktqtfPdg",
+        "Twista_HuntaLIVE": "UCh21stagaKCZAMRrtaP01gg"
     }
 
-    response = requests.get(url, params=params)
-    data = response.json()
+    live_streams = []
 
-    if data.get("items"):
-        return jsonify({"live": True})
-    else:
-        return jsonify({"live": False})
+    for name, channel_id in channel_ids.items():
+        # Search recent videos
+        search_url = "https://www.googleapis.com/youtube/v3/search"
+        search_params = {
+            "part": "id",
+            "channelId": channel_id,
+            "order": "date",
+            "maxResults": 5,
+            "type": "video",
+            "key": api_key
+        }
+
+        search_response = requests.get(search_url, params=search_params)
+        search_data = search_response.json()
+
+        for item in search_data.get("items", []):
+            video_id = item["id"]["videoId"]
+
+            # Check live status
+            video_url = "https://www.googleapis.com/youtube/v3/videos"
+            video_params = {
+                "part": "liveStreamingDetails",
+                "id": video_id,
+                "key": api_key
+            }
+
+            video_response = requests.get(video_url, params=video_params)
+            video_data = video_response.json()
+
+            if video_data.get("items"):
+                details = video_data["items"][0].get("liveStreamingDetails", {})
+                if "actualStartTime" in details and "actualEndTime" not in details:
+                    live_streams.append({
+                        "name": name,
+                        "videoId": video_id
+                    })
+
+    return jsonify(live_streams)
 
 @app.route('/weather')
 def get_weather():
