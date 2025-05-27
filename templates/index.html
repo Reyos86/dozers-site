@@ -359,23 +359,24 @@
 	    const res = await fetch('/youtube_status');
 	    const data = await res.json();
 	
-	    if (data.live) {
+	    if (Array.isArray(data) && data.length > 0) {
 	      const liveNowSection = document.getElementById("live-now");
 	      liveNowSection.style.display = "block";
 	
-	      const streamEmbed = `
-	        <div class="live-card">
-	          <iframe
-	            src="https://www.youtube.com/embed/live_stream?channel=UClkdz-_SpaJkgcIktqtfPdg&autoplay=1"
-	            height="300"
-	            width="100%"
-	            allowfullscreen>
-	          </iframe>
-	          <p><strong>DarkShockGamer1</strong> is live on YouTube!</p>
-	        </div>
-	      `;
-	
-	      document.getElementById("live-streams").innerHTML += streamEmbed;
+	      data.forEach(stream => {
+	        const streamEmbed = `
+	          <div class="live-card">
+	            <iframe
+	              src="https://www.youtube.com/embed/${stream.videoId}?autoplay=1"
+	              height="300"
+	              width="100%"
+	              allowfullscreen>
+	            </iframe>
+	            <p><strong>${stream.name}</strong> is live on YouTube!</p>
+	          </div>
+	        `;
+	        document.getElementById("live-streams").innerHTML += streamEmbed;
+	      });
 	    }
 	  } catch (err) {
 	    console.error("Error checking YouTube live status:", err);
