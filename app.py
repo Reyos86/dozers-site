@@ -107,6 +107,28 @@ def twitch_status():
     else:
         return jsonify({"live": False})
 
+@app.route('/youtube_status')
+def youtube_status():
+    api_key = os.environ.get("YOUTUBE_API_KEY")
+    channel_id = ""UClkdz-_SpaJkgcIktqtfPdg"  # Replace with DarkShockGamer1's actual channel ID
+
+    url = "https://www.googleapis.com/youtube/v3/search"
+    params = {
+        "part": "snippet",
+        "channelId": channel_id,
+        "eventType": "live",
+        "type": "video",
+        "key": api_key
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    if data.get("items"):
+        return jsonify({"live": True})
+    else:
+        return jsonify({"live": False})
+
 @app.route('/weather')
 def get_weather():
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
