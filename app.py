@@ -118,41 +118,24 @@ def youtube_status():
     live_streams = []
 
     for name, channel_id in channel_ids.items():
-        # Search recent videos
         search_url = "https://www.googleapis.com/youtube/v3/search"
         search_params = {
             "part": "id",
             "channelId": channel_id,
-            "order": "date",
-            "maxResults": 5,
+            "eventType": "live",
             "type": "video",
             "key": api_key
         }
 
-        search_response = requests.get(search_url, params=search_params)
-        search_data = search_response.json()
+        response = requests.get(search_url, params=search_params)
+        data = response.json()
 
-        for item in search_data.get("items", []):
+        for item in data.get("items", []):
             video_id = item["id"]["videoId"]
-
-            # Check live status
-            video_url = "https://www.googleapis.com/youtube/v3/videos"
-            video_params = {
-                "part": "liveStreamingDetails",
-                "id": video_id,
-                "key": api_key
-            }
-
-            video_response = requests.get(video_url, params=video_params)
-            video_data = video_response.json()
-
-            if video_data.get("items"):
-                details = video_data["items"][0].get("liveStreamingDetails", {})
-                if "actualStartTime" in details and "actualEndTime" not in details:
-                    live_streams.append({
-                        "name": name,
-                        "videoId": video_id
-                    })
+            live_streams.append({
+                "name": name,
+                "videoId": video_id
+            })
 
     return jsonify(live_streams)
 
