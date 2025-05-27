@@ -139,6 +139,7 @@ def youtube_status():
 
     return jsonify(live_streams)
 
+
 @app.route('/weather')
 def get_weather():
     api_key = "35b5f6e19f2be4347afe5d6076b4d008"
