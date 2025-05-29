@@ -92,17 +92,17 @@ def get_outbrk_stats(token):
         if response.status_code != 200:
             return {}
 
-    data = response.json()
-    stats = {item["name"]: item["value"] for item in data.get("playerstats", {}).get("stats", [])}
+        data = response.json()
+        stats = {item["name"]: item["value"] for item in data.get("playerstats", {}).get("stats", [])}
 
-    return {
-        "driven_miles": round(stats.get("distance_travelled_driving", 0) * KM_TO_MI, 2),
-        "foot_miles": round(stats.get("distance_travelled_onfoot", 0) * M_TO_MI, 2),
-        "direct_intercepts": int(stats.get("tornado_direct_hits", 0)),
-        "probes_deployed": int(stats.get("probes_deployed", 0)),
-        "probes_recovered": int(stats.get("probes_recovered", 0)),
-        "best_chase_score": int(stats.get("best_chase_score", 0))
-    }
+        return {
+            "driven_miles": round(stats.get("distance_travelled_driving", 0) * KM_TO_MI, 2),
+            "foot_miles": round(stats.get("distance_travelled_onfoot", 0) * M_TO_MI, 2),
+            "direct_intercepts": int(stats.get("tornado_direct_hits", 0)),
+            "probes_deployed": int(stats.get("probes_deployed", 0)),
+            "probes_recovered": int(stats.get("probes_recovered", 0)),
+            "best_chase_score": int(stats.get("best_chase_score", 0))
+        }
 
     except Exception as e:
         print(f"Error fetching stats for token {token}: {e}")
