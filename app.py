@@ -26,6 +26,7 @@ founders = [
         "nickname": "His Jeep Goes Beep-Beep",
         "bio": "Dozer’s the glue holding the squad together — mostly duct tape and sarcasm, but it works. If he’s not cracking one-liners, he’s already two grid squares ahead, casually lining up the next intercept like it’s a Sunday drive.",
         "youtube": "https://www.youtube.com/@bulldozerbates",
+        "token": "dccb23c4"
       #  "twitch": "https://twitch.tv/skysniper"
     },
     {
