@@ -7,6 +7,9 @@ app = Flask(__name__)
 
 MESSAGES_FILE = 'messages.json'
 
+KM_TO_MI = 0.621371
+M_TO_MI = 0.000621371
+
 founders = [
     {
         "name": "DarkShockGamer",
@@ -14,7 +17,8 @@ founders = [
         "nickname": "The Jeep-Flipping Mod Extraordinaire",
         "bio": "Hey, I’m DarkShockGamer. I help keep things running smoothly as a moderator on our Discord server. Whether it's navigating wild in-game moments (yes, even the occasional jeep flip) or helping the community stay connected and respectful, I’m always here to keep the wheels turning.",
         "youtube": "https://www.youtube.com/@DarkShockGamer1",
-        "twitch": "https://www.twitch.tv/blackshockgamer"
+        "twitch": "https://www.twitch.tv/blackshockgamer",
+        "token": "8bf12bdc"
     },
     {
         "name": "BullDozerBates",
@@ -80,6 +84,28 @@ founders = [
     #    "twitch": "https://www.twitch.tv/applejacks1980"
     },    
 ]
+
+def get_outbrk_stats(token):
+    url = f"https://api.outbrkgame.com/api/stats?token={token}"
+    response = requests.get(url)
+    if response.status_code != 200:
+        return {}
+
+    data = response.json()
+    stats = {item["name"]: item["value"] for item in data.get("playerstats", {}).get("stats", [])}
+
+    return {
+        "driven_miles": round(stats.get("distance_travelled_driving", 0) * KM_TO_MI, 2),
+        "foot_miles": round(stats.get("distance_travelled_onfoot", 0) * M_TO_MI, 2),
+        "direct_intercepts": int(stats.get("tornado_direct_hits", 0)),
+        "probes_deployed": int(stats.get("probes_deployed", 0)),
+        "probes_recovered": int(stats.get("probes_recovered", 0)),
+        "best_chase_score": int(stats.get("best_chase_score", 0))
+    }
+
+    except Exception as e:
+        print(f"Error fetching stats for token {token}: {e}")
+        return {}
 
 @app.route('/media')
 def media():
@@ -224,7 +250,15 @@ def index():
     else:
         messages = []
 
-    return render_template('index.html', messages=messages, founders=founders)
+    enhanced_founders = []
+    for founder in founders:
+        if "token" in founder:
+            stats = get_outbrk_stats(founder["token"])
+            founder["stats"] = stats
+        enhanced_founders.append(founder)
+    
+    return render_template('index.html', messages=messages, founders=enhanced_founders)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
