@@ -82,7 +82,8 @@ founders = [
         "nickname": "Radar Renegade",
         "bio": "AJ doesn’t check the radar — the radar checks with AJ. Known for casually flirting with EF3s and turning missed intercepts into highlight reels, Ayeejax lives by one motto: if there’s a storm worth chasing, he’s already down the road yelling “SEND IT!” over comms.",
         "youtube": "https://www.youtube.com/channel/UCISTQmtiSMZuzJNX_YYJ-0A",
-    #    "twitch": "https://www.twitch.tv/applejacks1980"
+    #    "twitch": "https://www.twitch.tv/applejacks1980",
+        "token": "9c1628ac"
     },    
 ]
 
