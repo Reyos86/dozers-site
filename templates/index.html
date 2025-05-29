@@ -117,21 +117,21 @@
 		}
 
 		.founders-grid {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: center;
-			gap: 20px;
+			  display: grid;
+			  grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
+			  gap: 20px;
+			  justify-items: center;
 		}
 
 		.founder-card {
-		  background: #1a1a1a;
-		  border-radius: 8px;
-		  padding: 1em;
-		  flex: 1 1 300px; /* 👈 flexible width, min ~300px */
-		  max-width: 320px;
-		  color: #eee;
-		  text-align: center;
-		  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+			  width: 100%;
+			  max-width: 300px;
+			  background: #1a1a1a;
+			  border-radius: 8px;
+			  padding: 1em;
+			  color: #eee;
+			  text-align: center;
+			  box-shadow: 0 0 10px rgba(0,0,0,0.4);
 		}
 
 		.founder-card img {
