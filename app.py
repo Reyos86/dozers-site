@@ -43,7 +43,8 @@ founders = [
         "nickname": "Jeff Herder",
         "bio": "Queen-B is the life of the convoy — loud on comms, quick with the jokes, and somehow still the one keeping everyone on track. She may bring the chaos, but when it’s go-time, she’s all business (with a side of sass)!",
         "youtube": "https://youtube.com/@queenbukkake?si=zmGKoZBhUdMjrhh5",
-      #  "twitch": "https://twitch.tv/skysniper"
+      #  "twitch": "https://twitch.tv/skysniper",
+        "token": "6ccbaf4b"    
     },
         {
         "name": "Reyos",
