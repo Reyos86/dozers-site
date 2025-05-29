@@ -34,7 +34,8 @@ founders = [
         "nickname": "Jeff #1",
         "bio": "I don't chase storms to escape the calm—I chase them to meet the chaos head-on and come out stronger on the other side.",
         "youtube": "https://youtube.com/@garodah?si=qc9CkDalQ-t9TszC",
-      #  "twitch": "https://twitch.tv/skysniper"
+      #  "twitch": "https://twitch.tv/skysniper",
+        "token": "e414efd7"
     },
         {
         "name": "Queen-B",
