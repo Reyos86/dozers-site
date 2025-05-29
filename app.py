@@ -52,7 +52,8 @@ founders = [
         "nickname": "Snack Provider",
         "bio": "Calm in the chaos, steady on the intercept — they call the shots without needing to shout. Whether leading a van full of Jeffs into the storm or quietly crafting the next great squad moment, they’re always chasing something bigger… usually with radar in one hand and a joke in the other.",
         "youtube": "https://www.youtube.com/@reyos86",
-        "twitch": "https://www.twitch.tv/reyos86"
+        "twitch": "https://www.twitch.tv/reyos86",
+        "token": "a55f058c"    
     },
         {
         "name": "Joe \"Garodah\"",
