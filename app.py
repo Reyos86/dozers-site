@@ -87,10 +87,10 @@ founders = [
 
 def get_outbrk_stats(token):
     try:
-    url = f"https://api.outbrkgame.com/api/stats?token={token}"
-    response = requests.get(url)
-    if response.status_code != 200:
-        return {}
+        url = f"https://api.outbrkgame.com/api/stats?token={token}"
+        response = requests.get(url)
+        if response.status_code != 200:
+            return {}
 
     data = response.json()
     stats = {item["name"]: item["value"] for item in data.get("playerstats", {}).get("stats", [])}
