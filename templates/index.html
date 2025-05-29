@@ -124,13 +124,16 @@
 		}
 
 		.founder-card {
-			background: #1a1a1a;
-			border-radius: 8px;
-			padding: 1em;
-			width: 260px;
-			color: #eee;
-			text-align: center;
-			box-shadow: 0 0 10px rgba(0,0,0,0.4);
+		  background: #1a1a1a;
+		  border-radius: 12px;
+		  padding: 1.2em;
+		  width: 300px;
+		  color: #eee;
+		  text-align: center;
+		  box-shadow: 0 0 12px rgba(0,0,0,0.5);
+		  display: flex;
+		  flex-direction: column;
+		  justify-content: space-between;
 		}
 
 		.founder-card img {
@@ -140,10 +143,55 @@
 			object-fit: cover;
 			margin-bottom: 10px;
 		}
+	    
+		.founder-card .nickname {
+			  font-style: italic;
+			  font-size: 0.95em;
+			  color: #aaa;
+			  margin-bottom: 10px;
+		}	    
 
+		.founder-card .bio {
+		  font-size: 0.9em;
+		  line-height: 1.5;
+		  margin-bottom: 12px;
+		}
+		
+		.founder-stats {
+		  margin-top: 10px;
+		  background: rgba(255, 255, 255, 0.05);
+		  border-radius: 10px;
+		  padding: 10px 12px;
+		  text-align: left;
+		}
+		
+		.founder-stats h4 {
+		  color: #0cf;
+		  font-size: 1em;
+		  margin-bottom: 6px;
+		}
+		
+		.founder-stats ul {
+		  list-style: none;
+		  padding: 0;
+		  margin: 0;
+		  font-size: 0.9em;
+		}
+		
+		.founder-stats li {
+		  margin: 4px 0;
+		  display: flex;
+		  gap: 6px;
+		  align-items: center;
+		}
+		
+		.founder-stats li span {
+		  font-size: 1.1em;
+		}	    
 		.founder-card h3 {
-			margin: 10px 0 5px;
-			font-size: 1.2em;
+			  margin-top: 10px;
+			  font-size: 1.3em;
+			  color: #ffffff;
 		}
 
 		.founder-card p {
@@ -464,32 +512,35 @@
 		<div class="founders-grid">
 			{% for founder in founders %}
 			<div class="founder-card">
-				<img src="{{ url_for('static', filename=founder.image) }}" alt="{{ founder.name }}">
-				<h3>{{ founder.name }}</h3>
-				<p>{{ founder.nickname }}</p>
-				<p>{{ founder.bio }}</p>
-				<div class="social-links">
-					{% if founder.youtube %}
-					<a href="{{ founder.youtube }}" target="_blank">📺</a>
-					{% endif %}
-					{% if founder.twitch %}
-					<a href="{{ founder.twitch }}" target="_blank">🎮</a>
-					{% endif %}
-				</div>
-				{% if founder.stats %}
-				  <div class="founder-stats">
-				    <h4>🌪️ Storm Chasing Stats</h4>
-				    <ul>
-				      <li><strong>Distance Driven:</strong> {{ founder.stats.driven_miles }} mi</li>
-				      <li><strong>Distance On Foot:</strong> {{ founder.stats.foot_miles }} mi</li>
-				      <li><strong>Direct Intercepts:</strong> {{ founder.stats.direct_intercepts }}</li>
-				      <li><strong>Probes Deployed:</strong> {{ founder.stats.probes_deployed }}</li>
-				      <li><strong>Probes Recovered:</strong> {{ founder.stats.probes_recovered }}</li>
-				      <li><strong>Best Chase Score:</strong> {{ founder.stats.best_chase_score }}</li>
-				    </ul>
-				  </div>
-				{% endif %}
+			  <img src="{{ url_for('static', filename=founder.image) }}" alt="{{ founder.name }}">
+			  <h3>{{ founder.name }}</h3>
+			  <p class="nickname">{{ founder.nickname }}</p>
+			  <p class="bio">{{ founder.bio }}</p>
+			
+			  <div class="social-links">
+			    {% if founder.youtube %}
+			    <a href="{{ founder.youtube }}" target="_blank">📺</a>
+			    {% endif %}
+			    {% if founder.twitch %}
+			    <a href="{{ founder.twitch }}" target="_blank">🎮</a>
+			    {% endif %}
+			  </div>
+			
+			  {% if founder.stats %}
+			  <div class="founder-stats">
+			    <h4>🌪️ Storm Chasing Stats</h4>
+			    <ul>
+			      <li><span>🚙</span> <strong>Driven:</strong> {{ founder.stats.driven_miles }} mi</li>
+			      <li><span>👟</span> <strong>On Foot:</strong> {{ founder.stats.foot_miles }} mi</li>
+			      <li><span>🎯</span> <strong>Direct Hits:</strong> {{ founder.stats.direct_intercepts }}</li>
+			      <li><span>📡</span> <strong>Probes Deployed:</strong> {{ founder.stats.probes_deployed }}</li>
+			      <li><span>📥</span> <strong>Probes Recovered:</strong> {{ founder.stats.probes_recovered }}</li>
+			      <li><span>🏆</span> <strong>Best Score:</strong> {{ founder.stats.best_chase_score }}</li>
+			    </ul>
+			  </div>
+			  {% endif %}
 			</div>
+
 			{% endfor %}
 		</div>
 	</div>
