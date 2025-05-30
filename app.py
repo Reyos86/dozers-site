@@ -133,6 +133,7 @@ def signup():
         try:
             client = get_gsheet_client()
             sheet = client.open("OutbrkSignups").sheet1  # Change name if needed
+            print("Writing to sheet...")
             sheet.append_row([display_name, token])
         except Exception as e:
             print(f"Error writing to Google Sheets: {e}")
