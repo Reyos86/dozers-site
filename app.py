@@ -3,7 +3,7 @@ import json
 import os
 import requests
 import gspread
-from google.oauth2.service_account import ServiceAccountCredentials
+from oauth2client.service_account import ServiceAccountCredentials
 
 app = Flask(__name__)
 
