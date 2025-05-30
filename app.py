@@ -118,9 +118,9 @@ def get_outbrk_stats(token):
 
 import os
 
-# Initialize Sheets client
 def get_gsheet_client():
-    creds = Credentials.from_service_account_file('/etc/secrets/dozers-leaderboard-3c46cc25ae6b.json')
+    scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+    creds = Credentials.from_service_account_file('/etc/secrets/dozers-leaderboard-3c46cc25ae6b.json', scopes=scopes)
     client = gspread.authorize(creds)
     return client
 
