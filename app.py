@@ -114,18 +114,35 @@ def get_outbrk_stats(token):
         print(f"Error fetching stats for token {token}: {e}")
         return {}
 
+import os
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         display_name = request.form.get("display_name")
         token = request.form.get("token")
 
-        # Save to JSON file
-        with open("outbrk_users.json", "a") as f:
-            json.dump({"display_name": display_name, "token": token}, f)
-            f.write("\n")
+        # Load current users
+        if os.path.exists("outbrk_users.json"):
+            with open("outbrk_users.json", "r") as f:
+                try:
+                    users = json.load(f)
+                except json.JSONDecodeError:
+                    users = []
+        else:
+            users = []
 
-        return redirect(url_for('index'))  # Or wherever you want to go after
+        # Add new user
+        users.append({
+            "display_name": display_name,
+            "token": token
+        })
+
+        # Save updated list
+        with open("outbrk_users.json", "w") as f:
+            json.dump(users, f, indent=2)
+
+        return redirect(url_for('index'))
 
     return render_template('signup.html')
 
