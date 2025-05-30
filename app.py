@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 import json
 import os
 import requests
+import gspread
+from google.oauth2.service_account import Credentials
 
 app = Flask(__name__)
 
@@ -115,6 +117,12 @@ def get_outbrk_stats(token):
         return {}
 
 import os
+
+# Initialize Sheets client
+def get_gsheet_client():
+    creds = Credentials.from_service_account_file('/etc/secrets/dozers-leaderboard-3c46cc25ae6b.json')
+    client = gspread.authorize(creds)
+    return client
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
