@@ -122,30 +122,29 @@ def signup():
         display_name = request.form.get("display_name")
         token = request.form.get("token")
 
-        # Load current users
+        # Ensure file exists and load
+        users = []
         if os.path.exists("outbrk_users.json"):
             with open("outbrk_users.json", "r") as f:
                 try:
                     users = json.load(f)
                 except json.JSONDecodeError:
                     users = []
-        else:
-            users = []
-
-        # Add new user
+        
+        # Append new user
         users.append({
             "display_name": display_name,
             "token": token
         })
 
-        # Save updated list
+        # Save the updated list
         with open("outbrk_users.json", "w") as f:
             json.dump(users, f, indent=2)
 
-        return redirect(url_for('index'))
+        return redirect(url_for('signup'))  # or 'index' if preferred
 
     return render_template('signup.html')
-
+    
 @app.route('/media')
 def media():
     return render_template('media.html')
