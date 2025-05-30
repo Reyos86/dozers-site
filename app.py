@@ -144,7 +144,35 @@ def signup():
         return redirect(url_for('index'))  # Or your desired redirect
 
     return render_template('signup.html')
-    
+
+@app.route('/leaderboard')
+def leaderboard():
+    try:
+        client = get_gsheet_client()
+        sheet = client.open("OutbrkSignups").sheet1
+        records = sheet.get_all_records()
+
+        data = []
+        for record in records:
+            display_name = record.get("display_name")
+            token = record.get("token")
+            try:
+                url = f"https://api.outbrkgame.com/api/stats?token={token}"
+                response = requests.get(url)
+                stats = {item["name"]: item["value"] for item in response.json().get("playerstats", {}).get("stats", [])}
+                data.append({
+                    "name": display_name,
+                    "probes": int(stats.get("probes_deployed", 0)),
+                })
+            except:
+                continue
+
+        top_probes = sorted(data, key=lambda x: x["probes"], reverse=True)[:10]
+        return render_template('leaderboard.html', leaderboard=top_probes)
+
+    except Exception as e:
+        return f"Error: {e}"
+
 @app.route('/media')
 def media():
     return render_template('media.html')
