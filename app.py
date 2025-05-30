@@ -117,24 +117,17 @@ def get_outbrk_stats(token):
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        display_name = request.form.get('display_name')
-        token = request.form.get('token')
+        display_name = request.form.get("display_name")
+        token = request.form.get("token")
 
-        if display_name and token:
-            new_user = {"name": display_name, "token": token}
-            if os.path.exists("tokens.json"):
-                with open("tokens.json", "r") as f:
-                    data = json.load(f)
-            else:
-                data = []
+        # Save to JSON file
+        with open("outbrk_users.json", "a") as f:
+            json.dump({"display_name": display_name, "token": token}, f)
+            f.write("\n")
 
-            data.append(new_user)
+        return redirect(url_for('index'))  # Or wherever you want to go after
 
-            with open("tokens.json", "w") as f:
-                json.dump(data, f, indent=2)
-
-            return redirect(url_for('index'))  # or show a thank-you page
-    return render_template("signup.html")
+    return render_template('signup.html')
 
 @app.route('/media')
 def media():
