@@ -62,8 +62,8 @@ founders = [
         "nickname": "The Weatherman",
         "bio": "Joe didn’t just study weather — he probably majored in “knowing where the storm is before the radar does.” While the rest of us are yelling “WHERE’S IT GOING?”, Joe’s already halfway there, sipping coffee and marking the probe spot with GPS-level precision.",
         "youtube": "https://youtube.com/@garodah?si=qc9CkDalQ-t9TszC",
-        "token": "236a1685"    
-      #  "twitch": "https://twitch.tv/skysniper"
+        "token": "236a1685",    
+        "twitch": "https://twitch.tv/GarodahKing"
     },
         {
         "name": "Dre \"BeardedSerb\"",
