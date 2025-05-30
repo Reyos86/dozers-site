@@ -114,6 +114,28 @@ def get_outbrk_stats(token):
         print(f"Error fetching stats for token {token}: {e}")
         return {}
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        display_name = request.form.get('display_name')
+        token = request.form.get('token')
+
+        if display_name and token:
+            new_user = {"name": display_name, "token": token}
+            if os.path.exists("tokens.json"):
+                with open("tokens.json", "r") as f:
+                    data = json.load(f)
+            else:
+                data = []
+
+            data.append(new_user)
+
+            with open("tokens.json", "w") as f:
+                json.dump(data, f, indent=2)
+
+            return redirect(url_for('index'))  # or show a thank-you page
+    return render_template("signup.html")
+
 @app.route('/media')
 def media():
     return render_template('media.html')
