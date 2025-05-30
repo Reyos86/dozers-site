@@ -3,7 +3,7 @@ import json
 import os
 import requests
 import gspread
-from google.oauth2.service_account import Credentials
+from google.oauth2.service_account import ServiceAccountCredentials
 
 app = Flask(__name__)
 
@@ -119,10 +119,13 @@ def get_outbrk_stats(token):
 import os
 
 def get_gsheet_client():
-    scopes = ["https://www.googleapis.com/auth/spreadsheets"]
-    creds = Credentials.from_service_account_file('/etc/secrets/dozers-leaderboard-3c46cc25ae6b.json', scopes=scopes)
-    client = gspread.authorize(creds)
-    return client
+    scope = [
+        "https://www.googleapis.com/auth/spreadsheets",  # ✅ Full access to Sheets
+        "https://www.googleapis.com/auth/drive"           # ✅ Needed to access by title
+    ]
+
+    creds = ServiceAccountCredentials.from_json_keyfile_name("/etc/secrets/dozers-leaderboard-3c46cc25ae6b.json", scope)
+    return gspread.authorize(creds)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
