@@ -185,49 +185,45 @@ def leaderboard():
                 }
 
                 for key in stat_keys:
-                    value = stats.get(key, 0)
+                    raw_value = stats.get(key, 0)
 
-                    # Convert and add units
+                    # Format display value + convert units
                     if key == "highest_wind_recorded":
-                        value = f"{round(float(value) * 0.621371)} mph"
+                        raw_value = float(raw_value) * 0.621371
+                        display_value = f"{round(raw_value)} mph"
 
                     elif key in ["distance_travelled_driving", "distance_travelled_onfoot"]:
-                        value = f"{round(float(value) / 1609.34, 1)} mi"
+                        raw_value = float(raw_value) / 1609.34
+                        display_value = f"{round(raw_value, 1)} mi"
 
                     elif key == "total_money_earned":
-                        value = f"${int(value):,}"
+                        raw_value = int(raw_value)
+                        display_value = f"${raw_value:,}"
 
                     elif key == "expenses_damage":
-                        value = f"-${int(value):,}"
+                        raw_value = int(raw_value)
+                        display_value = f"-${raw_value:,}"
 
                     else:
-                        value = int(value)
+                        raw_value = int(raw_value)
+                        display_value = raw_value
 
                     all_stats[key].append({
                         "name": display_name,
-                        "value": value
+                        "value": display_value,
+                        "sort": raw_value
                     })
+
             except:
                 continue
 
-        # Sort and take top 10 for each stat (numeric only)
+        # ✅ Sort and take top 10 for each stat
         top_stats = {}
         for key, entries in all_stats.items():
-            # Strip unit for sorting
-            def sortable(e):
-                val = e["value"]
-                try:
-                    return float(str(val).split()[0].replace('$', '').replace(',', '').replace('-', ''))
-                except:
-                    return 0
-
-            sorted_entries = sorted(entries, key=sortable, reverse=True)[:10]
+            sorted_entries = sorted(entries, key=lambda e: e["sort"], reverse=True)[:10]
             top_stats[stat_keys[key]] = sorted_entries
 
         return render_template('leaderboard.html', stats=top_stats)
-
-    except Exception as e:
-        return f"Error: {e}"
 
     except Exception as e:
         return f"Error: {e}"
