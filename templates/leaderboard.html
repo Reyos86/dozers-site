@@ -7,8 +7,9 @@
   <style>
     body {
       margin: 0;
-      padding: 100px 20px 20px; /* leave space for navbar */
-      background: radial-gradient(ellipse at center, #0d0d0d 0%, #000000 100%);
+      padding: 100px 20px 20px;
+      background: url("{{ url_for('static', filename='leaderboard_bg.png') }}") no-repeat center center fixed;
+      background-size: cover;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #eee;
     }
