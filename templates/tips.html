@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tips & Tricks - Dozer's Team</title>
+  <link rel="icon" href="{{ url_for('static', filename='Dozerfavicon.png') }}" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      padding: 100px 20px 40px;
+      background: url("{{ url_for('static', filename='leaderboard_bg.png') }}") no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      color: #eee;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 15px 0;
+      background: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 999;
+      backdrop-filter: blur(6px);
+    }
+
+    .navbar a {
+      color: #eee;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: color 0.2s ease;
+    }
+
+    .navbar a:hover {
+      color: #00aaff;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: rgba(0, 0, 0, 0.65);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+      text-align: center;
+      color: #00ccff;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #ffcc00;
+      margin-top: 30px;
+    }
+
+    ul {
+      list-style: disc;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="/">Home</a>
+    <a href="/media">Media</a>
+    <a href="/leaderboard">Leaderboard</a>
+    <a href="/tips">Tips & Tricks</a>
+    <a href="https://trello.com/b/oXuJZS7p/dozers-team" target="_blank">Trello</a>
+    <a href="https://x.com/DozersChasing" target="_blank">X (Twitter)</a>
+    <a href="https://www.windy.com/-Menu/menu?radar,36.792,-95.317,5,p:favs" target="_blank">Live Weather</a>
+  </div>
+
+  <div class="container">
+    <h1>🌪 Tips & Tricks for Outbrk</h1>
+
+    <h2>Passenger Tips</h2>
+    <ul>
+      <li>Have your phone and camera ready to scout for wall clouds, funnel clouds, and tornadoes. Rack up points while helping the driver navigate.</li>
+      <li>Press "X" on the keyboard to look behind you and ensure everyone is in the vehicle before driving off. This also works for passengers to take pictures or report things behind you.</li>
+    </ul>
+
+    <h2>Driver Tips</h2>
+    <ul>
+      <li>Press "X" on the keyboard to look behind you and ensure everyone is in the vehicle before driving off. This also works for passengers to take pictures or report things behind you.</li>
+      <li>If you're my passenger, when I say "it's time to go!", either be in the car or be prepared to run from the tornado on foot! 😂</li>
+    </ul>
+
+    <h2>Chase Tips</h2>
+    <ul>
+      <li>When within intercept distance of a tornado, use your visuals of the tornado over the radar, as the actual tornado location is not known by the radar.</li>
+      <li>Tornadoes change direction when the radar updates every minute and also change speed.</li>
+      <li>Zooming in on the base or top of the tornado can help determine its movement. If it isn't moving, it's coming directly at you.</li>
+      <li>Your probe recharges quicker in the car than outside, so maximize in-car time for quick intercepts.</li>
+      <li>As a general rule, the max wind speed for being in the vehicle is 85 mph before you can get dragged or lifted. Players are safe up to 100 mph.</li>
+    </ul>
+
+    <h2>Group Chase Guide</h2>
+    <ul>
+      <li>Make sure you're on Discord (PC) for the best results.</li>
+      <li>Navigate to the general section of the server and find the codes (e.g., "wind-tornado-sleet-sleet-58"). Copy the code.</li>
+      <li>Go to your OUTBRK game, enter Group Chase, and paste the code to join. Communicate, have fun, and try not to die! 😂</li>
+      <li><strong>Pro Tip:</strong> Join a Discord voice chat before the game. We're happy to answer any questions you may have!</li>
+    </ul>
+  </div>
+</body>
+</html>
+
