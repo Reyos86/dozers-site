@@ -243,6 +243,10 @@ def leaderboard():
 
     except Exception as e:
         return f"Error: {e}"
+        
+@app.route('/tips')
+def tips():
+    return render_template('tips.html')
 
 @app.route('/media')
 def media():
