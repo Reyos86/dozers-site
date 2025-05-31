@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Outbrk Leaderboard - Probes Deployed</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(ellipse at center, #0d0d0d 0%, #000000 100%);
+            color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .leaderboard {
+            background: rgba(20, 20, 30, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 0 25px #0ff;
+            padding: 30px;
+            width: 360px;
+            text-align: center;
+        }
+
+        .leaderboard h1 {
+            font-size: 24px;
+            color: #00ccff;
+            margin-bottom: 20px;
+        }
+
+        .entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .entry:last-child {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-weight: bold;
+            color: #0ff;
+        }
+
+        .name {
+            flex-grow: 1;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .score {
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        .glow {
+            text-shadow: 0 0 8px #0ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="leaderboard">
+        <h1 class="glow">🌪 TOTAL PROBES DEPLOYED</h1>
+        {% for player in leaderboard %}
+        <div class="entry">
+            <div class="rank">#{{ loop.index }}</div>
+            <div class="name">{{ player.name }}</div>
+            <div class="score">{{ player.probes }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
