@@ -2,39 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Outbrk Leaderboard - Probes Deployed</title>
+    <title>Outbrk Leaderboards</title>
     <style>
         body {
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
             background: radial-gradient(ellipse at center, #0d0d0d 0%, #000000 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #eee;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
 
-        .leaderboard {
+        h1 {
+            text-align: center;
+            color: #00ccff;
+            text-shadow: 0 0 8px #0ff;
+            margin-bottom: 40px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
             background: rgba(20, 20, 30, 0.8);
             border-radius: 16px;
-            box-shadow: 0 0 25px #0ff;
-            padding: 30px;
-            width: 360px;
-            text-align: center;
+            box-shadow: 0 0 18px #0ff2;
+            padding: 20px;
         }
 
-        .leaderboard h1 {
-            font-size: 24px;
-            color: #00ccff;
-            margin-bottom: 20px;
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #ffcc00;
+            text-shadow: 0 0 6px #ffa500;
         }
 
         .entry {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .entry:last-child {
@@ -42,36 +51,38 @@
         }
 
         .rank {
-            font-weight: bold;
             color: #0ff;
+            font-weight: bold;
         }
 
         .name {
-            flex-grow: 1;
+            flex: 1;
+            padding: 0 8px;
             text-align: left;
-            padding-left: 10px;
         }
 
-        .score {
-            font-weight: bold;
+        .value {
             color: #ffcc00;
-        }
-
-        .glow {
-            text-shadow: 0 0 8px #0ff;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="leaderboard">
-        <h1 class="glow">🌪 TOTAL PROBES DEPLOYED</h1>
-        {% for player in leaderboard %}
-        <div class="entry">
-            <div class="rank">#{{ loop.index }}</div>
-            <div class="name">{{ player.name }}</div>
-            <div class="score">{{ player.probes }}</div>
+    <h1>🌪 OUTBRK COMMUNITY LEADERBOARDS</h1>
+    <div class="grid">
+        {% for stat_name, entries in stats.items() %}
+        <div class="card">
+            <h2>{{ stat_name }}</h2>
+            {% for entry in entries %}
+            <div class="entry">
+                <div class="rank">#{{ loop.index }}</div>
+                <div class="name">{{ entry.name }}</div>
+                <div class="value">{{ entry.value }}</div>
+            </div>
+            {% endfor %}
         </div>
         {% endfor %}
     </div>
 </body>
 </html>
+
