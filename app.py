@@ -171,7 +171,7 @@ def leaderboard():
 
         for record in records:
             display_name = record.get("Display Name")
-            token = record.get("Token", "").strip()
+            token = str(record.get("Token", "")).strip()
 
             if not display_name or not token:
                 continue
