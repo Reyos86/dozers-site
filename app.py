@@ -233,7 +233,7 @@ def leaderboard():
         top_stats = {}
         for key, entries in all_stats.items():
             reverse = True
-            if key in ["probes_lost", "expenses_damage"]:
+            if key in ["probes_lost", "expenses_damage", "windows_shattered"]:
                 reverse = False  # Lower is better!
             
             sorted_entries = sorted(entries, key=lambda e: e["sort"], reverse=reverse)[:10]
