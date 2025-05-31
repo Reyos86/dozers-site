@@ -197,7 +197,13 @@ def leaderboard():
                         raw_value = float(raw_value) * 0.621371
                         display_value = f"{round(raw_value)} mph"
 
-                    elif key in ["distance_travelled_driving", "distance_travelled_onfoot"]:
+                    if key == "distance_travelled_driving":
+                        # Kilometers → Miles
+                        raw_value = float(raw_value) * 0.621371
+                        display_value = f"{round(raw_value, 1)} mi"
+                    
+                    elif key == "distance_travelled_onfoot":
+                        # Meters → Miles
                         raw_value = float(raw_value) / 1609.34
                         display_value = f"{round(raw_value, 1)} mi"
 
