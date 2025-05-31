@@ -156,7 +156,7 @@ def leaderboard():
             "distance_travelled_driving": "Distance Driving (mi)",
             "distance_travelled_onfoot": "Distance On Foot (mi)",
             "probes_deployed": "Probes Deployed",
-            "probes_recovered": "Probes Recovered",
+            "probes_lost": "Probes Lost",   
             "windows_shattered": "Windows Shattered",
             "tornado_direct_hits": "Tornado Hits",
             "highest_wind_recorded": "Highest Wind (mph)",
@@ -165,7 +165,6 @@ def leaderboard():
             "best_chase_score": "Best Chase Score",
             "total_money_earned": "Money Earned",
             "expenses_damage": "Damage Expenses",
-            "probes_lost": "Probes Lost",
         }
         
         all_stats = {key: [] for key in stat_keys}
