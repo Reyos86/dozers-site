@@ -18,14 +18,17 @@
     overflow: hidden; /* Prevent white space on scroll */
   }
 
-    body {
-      margin: 0;
-      padding: 100px 20px 20px;
-      background: url("{{ url_for('static', filename='leaderboard_bg.png') }}") no-repeat center center fixed;
-      background-size: cover;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #eee;
-    }
+  body {
+    padding-top: 120px; /* Enough space below navbar */
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    margin: 0;
+    background: url("{{ url_for('static', filename='leaderboard_bg.png') }}") no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #eee;
+  }
 
     .navbar {
       display: flex;
@@ -76,25 +79,25 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(3, 1fr); /* 3 cards per row by default */
       gap: 12px;
-      justify-content: center;
+      padding: 0 12px;
       max-width: 100%;
-      padding: 0 10px;
+      margin: 0 auto;
       box-sizing: border-box;
     }
-
-  @media (max-width: 768px) {
-    .grid {
-      grid-template-columns: repeat(2, 1fr);
+    
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
-  }
-  
-  @media (max-width: 480px) {
-    .grid {
-      grid-template-columns: 1fr;
+    
+    @media (min-width: 1200px) {
+      .grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      }
     }
-  }
     
     .card {
       background: rgba(20, 20, 30, 0.8);
