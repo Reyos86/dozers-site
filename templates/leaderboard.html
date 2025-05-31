@@ -84,18 +84,22 @@
 </head>
 <body>
     <h1>🌪 DOZER'S LIVE STORM CHASING TEAM LEADERBOARDS</h1>
-    <div class="grid">
-        {% for stat_name, entries in stats.items() %}
-        <div class="card">
-            <h2>{{ stat_name }}</h2
-            {% set rank_class = 'gold' if loop.index == 1 else 'silver' if loop.index == 2 else 'bronze' if loop.index == 3 else '' %}
-            <div class="entry {{ rank_class }}">
-                <div class="rank">#{{ loop.index }}</div>
-                <div class="name">{{ entry.name }}</div>
-                <div class="value">{{ entry.value }}</div>
+        <div class="grid">
+            {% for stat_name, entries in stats.items() %}
+            <div class="card">
+                <h2>{{ stat_name }}</h2>
+                {% for entry in entries %}
+                    {% set rank_class = 'gold' if loop.index == 1 else 'silver' if loop.index == 2 else 'bronze' if loop.index == 3 else '' %}
+                    <div class="entry {{ rank_class }}">
+                        <div class="rank">#{{ loop.index }}</div>
+                        <div class="name">{{ entry.name }}</div>
+                        <div class="value">{{ entry.value }}</div>
+                    </div>
+                {% endfor %}
             </div>
             {% endfor %}
-    </div>
+</div>
+
 </body>
 </html>
 
