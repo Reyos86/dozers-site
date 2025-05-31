@@ -152,23 +152,82 @@ def leaderboard():
         sheet = client.open("OutbrkSignups").sheet1
         records = sheet.get_all_records()
 
-        data = []
+        stat_keys = {
+            "distance_travelled_driving": "Distance Driving (mi)",
+            "distance_travelled_onfoot": "Distance On Foot (mi)",
+            "probes_deployed": "Probes Deployed",
+            "probes_recovered": "Probes Recovered",
+            "windows_shattered": "Windows Shattered",
+            "tornado_direct_hits": "Tornado Hits",
+            "highest_wind_recorded": "Highest Wind (mph)",
+            "best_score_probe": "Best Probe Score",
+            "total_chases": "Total Chases",
+            "best_chase_score": "Best Chase Score",
+            "total_money_earned": "Money Earned",
+            "expenses_damage": "Damage Expenses",
+        }
+
+        all_stats = {key: [] for key in stat_keys}
+
         for record in records:
-            display_name = record.get("display_name")
-            token = record.get("token", "").strip()
+            display_name = record.get("Display Name")
+            token = record.get("Token", "").strip()
+
+            if not display_name or not token:
+                continue
+
             try:
                 url = f"https://api.outbrkgame.com/api/stats?token={token}"
                 response = requests.get(url)
-                stats = {item["name"]: item["value"] for item in response.json().get("playerstats", {}).get("stats", [])}
-                data.append({
-                    "name": display_name,
-                    "probes": int(stats.get("probes_deployed", 0)),
-                })
+                stats = {
+                    item["name"]: item["value"]
+                    for item in response.json().get("playerstats", {}).get("stats", [])
+                }
+
+                for key in stat_keys:
+                    value = stats.get(key, 0)
+
+                    # Convert and add units
+                    if key == "highest_wind_recorded":
+                        value = f"{round(float(value) * 0.621371)} mph"
+
+                    elif key in ["distance_travelled_driving", "distance_travelled_onfoot"]:
+                        value = f"{round(float(value) / 1609.34, 1)} mi"
+
+                    elif key == "total_money_earned":
+                        value = f"${int(value):,}"
+
+                    elif key == "expenses_damage":
+                        value = f"-${int(value):,}"
+
+                    else:
+                        value = int(value)
+
+                    all_stats[key].append({
+                        "name": display_name,
+                        "value": value
+                    })
             except:
                 continue
 
-        top_probes = sorted(data, key=lambda x: x["probes"], reverse=True)[:10]
-        return render_template('leaderboard.html', leaderboard=top_probes)
+        # Sort and take top 10 for each stat (numeric only)
+        top_stats = {}
+        for key, entries in all_stats.items():
+            # Strip unit for sorting
+            def sortable(e):
+                val = e["value"]
+                try:
+                    return float(str(val).split()[0].replace('$', '').replace(',', '').replace('-', ''))
+                except:
+                    return 0
+
+            sorted_entries = sorted(entries, key=sortable, reverse=True)[:10]
+            top_stats[stat_keys[key]] = sorted_entries
+
+        return render_template('leaderboard.html', stats=top_stats)
+
+    except Exception as e:
+        return f"Error: {e}"
 
     except Exception as e:
         return f"Error: {e}"
