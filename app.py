@@ -155,7 +155,7 @@ def leaderboard():
         data = []
         for record in records:
             display_name = record.get("display_name")
-            token = record.get("token")
+            token = record.get("token", "").strip()
             try:
                 url = f"https://api.outbrkgame.com/api/stats?token={token}"
                 response = requests.get(url)
