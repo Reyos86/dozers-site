@@ -1,106 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" href="{{ url_for('static', filename='Dozerfavicon.png') }}" type="image/png">
-    <meta charset="UTF-8">
-    <title>Outbrk Leaderboards</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            background: radial-gradient(ellipse at center, #0d0d0d 0%, #000000 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #eee;
-        }
+  <link rel="icon" href="{{ url_for('static', filename='Dozerfavicon.png') }}" type="image/png">
+  <meta charset="UTF-8">
+  <title>Outbrk Leaderboards</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 100px 20px 20px; /* leave space for navbar */
+      background: radial-gradient(ellipse at center, #0d0d0d 0%, #000000 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #eee;
+    }
 
-        h1 {
-            text-align: center;
-            color: #00ccff;
-            text-shadow: 0 0 8px #0ff;
-            margin-bottom: 40px;
-        }
-        .entry.gold .rank {
-            color: gold;
-            text-shadow: 0 0 5px gold;
-        }
-        
-        .entry.silver .rank {
-            color: silver;
-            text-shadow: 0 0 5px silver;
-        }
-        
-        .entry.bronze .rank {
-            color: #cd7f32; /* bronze color */
-            text-shadow: 0 0 5px #cd7f32;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(200px, 1fr));
-            gap: 12px; /* was 25px */
-            justify-content: center;
-            max-width: 1200px;
-            margin: auto;
-        }
-                .card {
-            background: rgba(20, 20, 30, 0.8);
-            border-radius: 16px;
-            box-shadow: 0 0 18px #0ff2;
-            padding: 20px;
-        }
+    .navbar {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 15px 0;
+      background: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 999;
+      backdrop-filter: blur(6px);
+    }
 
-        .card h2 {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #ffcc00;
-            text-shadow: 0 0 6px #ffa500;
-        }
+    .navbar a {
+      color: #eee;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: color 0.2s ease;
+    }
 
-        .entry {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
+    .navbar a:hover {
+      color: #00aaff;
+    }
 
-        .entry:last-child {
-            border-bottom: none;
-        }
+    h1 {
+      text-align: center;
+      color: #00ccff;
+      text-shadow: 0 0 8px #0ff;
+      margin-bottom: 40px;
+    }
 
-        .rank {
-            color: #0ff;
-            font-weight: bold;
-        }
+    .entry.gold .rank {
+      color: gold;
+      text-shadow: 0 0 5px gold;
+    }
 
-        .name {
-            flex: 1;
-            padding: 0 8px;
-            text-align: left;
-        }
+    .entry.silver .rank {
+      color: silver;
+      text-shadow: 0 0 5px silver;
+    }
 
-        .value {
-            color: #ffcc00;
-            font-weight: bold;
-        }
-    </style>
+    .entry.bronze .rank {
+      color: #cd7f32;
+      text-shadow: 0 0 5px #cd7f32;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(200px, 1fr));
+      gap: 12px;
+      justify-content: center;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .card {
+      background: rgba(20, 20, 30, 0.8);
+      border-radius: 16px;
+      box-shadow: 0 0 18px #0ff2;
+      padding: 20px;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #ffcc00;
+      text-shadow: 0 0 6px #ffa500;
+    }
+
+    .entry {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .entry:last-child {
+      border-bottom: none;
+    }
+
+    .rank {
+      color: #0ff;
+      font-weight: bold;
+    }
+
+    .name {
+      flex: 1;
+      padding: 0 8px;
+      text-align: left;
+    }
+
+    .value {
+      color: #ffcc00;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <h1>🌪 DOZER'S LIVE STORM CHASING TEAM LEADERBOARDS</h1>
-        <div class="grid">
-            {% for stat_name, entries in stats.items() %}
-            <div class="card">
-                <h2>{{ stat_name }}</h2>
-                {% for entry in entries %}
-                    {% set rank_class = 'gold' if loop.index == 1 else 'silver' if loop.index == 2 else 'bronze' if loop.index == 3 else '' %}
-                    <div class="entry {{ rank_class }}">
-                        <div class="rank">#{{ loop.index }}</div>
-                        <div class="name">{{ entry.name }}</div>
-                        <div class="value">{{ entry.value }}</div>
-                    </div>
-                {% endfor %}
-            </div>
-            {% endfor %}
-</div>
+  <div class="navbar">
+    <a href="/">Home</a>
+    <a href="/media">Media</a>
+    <a href="/leaderboard">Dozer's Leaderboard</a>
+    <a href="https://trello.com/b/oXuJZS7p/dozers-team" target="_blank">Trello</a>
+    <a href="https://x.com/DozersChasing" target="_blank">X (Twitter)</a>
+    <a href="https://www.windy.com/-Menu/menu?radar,36.792,-95.317,5,p:favs" target="_blank">Live Weather</a>
+  </div>
 
+  <h1>🌪 DOZER'S LIVE STORM CHASING TEAM LEADERBOARDS</h1>
+  <div class="grid">
+    {% for stat_name, entries in stats.items() %}
+    <div class="card">
+      <h2>{{ stat_name }}</h2>
+      {% for entry in entries %}
+        {% set rank_class = 'gold' if loop.index == 1 else 'silver' if loop.index == 2 else 'bronze' if loop.index == 3 else '' %}
+        <div class="entry {{ rank_class }}">
+          <div class="rank">#{{ loop.index }}</div>
+          <div class="name">{{ entry.name }}</div>
+          <div class="value">{{ entry.value }}</div>
+        </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
 </body>
 </html>
+
 
