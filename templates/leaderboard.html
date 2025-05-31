@@ -35,12 +35,13 @@
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* Force 4 per row */
-            gap: 25px;
-            justify-items: center;
+            grid-template-columns: repeat(4, minmax(200px, 1fr));
+            gap: 12px; /* was 25px */
+            justify-content: center;
+            max-width: 1200px;
+            margin: auto;
         }
-
-        .card {
+                .card {
             background: rgba(20, 20, 30, 0.8);
             border-radius: 16px;
             box-shadow: 0 0 18px #0ff2;
