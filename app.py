@@ -165,8 +165,9 @@ def leaderboard():
             "best_chase_score": "Best Chase Score",
             "total_money_earned": "Money Earned",
             "expenses_damage": "Damage Expenses",
+            "probes_lost": "Probes Lost",
         }
-
+        
         all_stats = {key: [] for key in stat_keys}
 
         for record in records:
@@ -184,6 +185,11 @@ def leaderboard():
                     for item in response.json().get("playerstats", {}).get("stats", [])
                 }
 
+                # Calculate probes_lost
+                probes_deployed_val = stats.get("probes_deployed", 0)
+                probes_recovered_val = stats.get("probes_recovered", 0)
+                stats["probes_lost"] = max(int(probes_deployed_val) - int(probes_recovered_val), 0)
+                    
                 for key in stat_keys:
                     raw_value = stats.get(key, 0)
 
@@ -214,13 +220,18 @@ def leaderboard():
                         "sort": raw_value
                     })
 
-            except:
+            except Exception as e:
+                print(f"Error processing {display_name}: {e}")
                 continue
 
-        # ✅ Sort and take top 10 for each stat
+        # ✅ Sort once, after processing all records
         top_stats = {}
         for key, entries in all_stats.items():
-            sorted_entries = sorted(entries, key=lambda e: e["sort"], reverse=True)[:10]
+            reverse = True
+            if key == "probes_lost":
+                reverse = False  # Lower is better!
+            
+            sorted_entries = sorted(entries, key=lambda e: e["sort"], reverse=reverse)[:10]
             top_stats[stat_keys[key]] = sorted_entries
 
         return render_template('leaderboard.html', stats=top_stats)
